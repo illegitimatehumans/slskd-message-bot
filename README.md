@@ -31,12 +31,17 @@ Clone the repository:
 git clone https://github.com/illegitimatehumans/slskd-bot.git
 cd slskd-bot
 ```
-
 Copy the example environment file:
 
 ```bash
 cp .env.example .env
 ```
+
+Edit `.env` with your own settings.
+
+On first startup, the bot automatically creates `data/message.txt` from `message.txt.example` if it doesn't already exist. You can edit `data/message.txt` at any time without rebuilding the container.
+
+Edit both files as needed before starting the bot.
 
 Edit `.env` with your own slskd settings.
 

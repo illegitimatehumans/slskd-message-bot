@@ -12,7 +12,7 @@ services:
     volumes:
       - ./data:/app/data
       - ./logs:/app/logs
-      - ./message.txt:/app/message.txt:ro
+      - ./message.txt.example:/app/message.txt.example:ro
     networks:
       - media-stack
 
