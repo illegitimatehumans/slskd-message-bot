@@ -1,19 +1,20 @@
-# slskd-bot
+k# slskd-bot
 
 A Python bot for slskd that monitors active uploads and sends a one-time private message to users who don't meet the configured sharing requirements.
 
-This project was built for my own Soulseek server running as part of the OwlTV media stack. The goal isn't to punish users, but to encourage sharing and help keep the Soulseek community healthy.
+This project was built for my own Soulseek server running as part of the OwlTV media stack. The goal is to encourage sharing and help keep the Soulseek community healthy without repeatedly messaging the same users.
 
-## What it does
+## Features
 
 - Monitors active uploads through the slskd API
 - Waits for a configurable grace period before checking a user
 - Browses the user's shared library
 - Counts shared files and shared folders
 - Compares those totals against configurable minimums
-- Sends a single private message if both thresholds are below the configured limits
+- Sends a one-time private message if both thresholds are below the configured limits
 - Stores results in SQLite so users are not messaged repeatedly
 - Supports a whitelist for users that should never be checked
+- Docker ready
 
 ## Requirements
 
@@ -22,36 +23,110 @@ This project was built for my own Soulseek server running as part of the OwlTV m
 - slskd 0.25 or newer
 - Python 3.13
 
+## Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/illegitimatehumans/slskd-bot.git
+cd slskd-bot
+```
+
+Copy the example environment file:
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` with your own slskd settings.
+
+Build and start the container:
+
+```bash
+docker compose up -d --build
+```
+
 ## Configuration
 
-Configuration is provided through the `.env` file.
+Configuration is handled through the `.env` file.
 
 Example:
 
 ```env
-SLSKD_URL=http://gluetun_slskd:5030
+# URL of your slskd instance
+
+# Docker Compose
+# SLSKD_URL=http://slskd:5030
+
+# Local installation
+# SLSKD_URL=http://localhost:5030
+
+# Remote server
+# SLSKD_URL=http://192.168.1.100:5030
+
+SLSKD_URL=http://slskd:5030
+
+# slskd API key
 SLSKD_API_KEY=YOUR_API_KEY
 
+# How often to check for uploads (seconds)
 CHECK_INTERVAL=60
+
+# Seconds to wait before evaluating a user
 GRACE_PERIOD=120
 
+# Minimum sharing requirements
 MIN_FILES=1000
 MIN_DIRECTORIES=20
 ```
 
-The warning message is stored separately in `message.txt` so it can be changed without modifying the source code.
+## Warning Policy
 
-## How it works
+The bot only sends a warning when **both** of these conditions are true:
 
-When a download starts, the bot waits for the configured grace period before evaluating the user.
+- Shared files are below the configured minimum (`MIN_FILES`)
+- Shared folders are below the configured minimum (`MIN_DIRECTORIES`)
 
-The bot then:
+By default:
 
-1. Browses the user's shared library.
-2. Counts the total number of shared files and folders.
-3. Compares those totals against the configured minimums.
-4. Sends a private message only if both values are below the limits.
-5. Records the result in the database so the same user isn't warned multiple times.
+```env
+MIN_FILES=1000
+MIN_DIRECTORIES=20
+```
+
+These values should match the thresholds configured in your `slskd.yml` if you're using slskd's transfer groups.
+
+Example:
+
+```yaml
+transfers:
+  groups:
+    leechers:
+      thresholds:
+        files: 1000
+        directories: 20
+      upload:
+        priority: 999
+        strategy: roundrobin
+        slots: 1
+        speed_limit: 100
+        limits:
+          queued:
+            files: 15
+            megabytes: 150
+          daily:
+            files: 30
+            megabytes: 300
+            failures: 10
+          weekly:
+            files: 150
+            megabytes: 1500
+            failures: 30
+```
+
+The bot does **not** enforce upload restrictions. It simply checks whether a user falls below the configured sharing thresholds and sends a one-time private message.
+
+Any upload limits, queue limits, or bandwidth restrictions are handled entirely by slskd through its transfer group configuration.
 
 ## Project Structure
 
@@ -66,9 +141,9 @@ app/
 
 ## Notes
 
-This project was written for my own server, but it should work with any recent slskd installation with minimal configuration.
+The bot uses the slskd REST API and stores its data in a local SQLite database.
 
-Contributions, bug reports, and suggestions are welcome.
+The warning message is stored in `message.txt`, so it can be edited without changing the source code.
 
 ## License
 
