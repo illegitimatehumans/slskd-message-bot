@@ -14,3 +14,7 @@ DRY_RUN = os.getenv("DRY_RUN", "true").lower() == "true"
 DATABASE = "/app/data/warned.sqlite"
 
 LOG_FILE = "/app/logs/slskd-bot.log"
+
+GOOD_RECHECK_MINUTES = int(
+    os.getenv("GOOD_RECHECK_MINUTES", 60)
+)
