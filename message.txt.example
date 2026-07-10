@@ -1,7 +1,19 @@
+Hello {username},
+
 Your current Soulseek shares appear to be below this server's minimum sharing requirements.
-Minimum sharing recommended:
--1000 shared files
-- 20  shared folders
+
+Current shares:
+
+- {files} shared files
+- {directories} shared folders
+
+Minimum recommended:
+
+- {min_files} shared files
+- {min_directories} shared folders
+
 Downloads may be limited until sharing is enabled.
+
 Sharing keeps Soulseek alive.
+
 Thank you for contributing.
