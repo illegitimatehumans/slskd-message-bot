@@ -33,11 +33,23 @@ class SlskdAPI:
 
     def put(self, endpoint, body):
 
+        log.info(f"PUT {endpoint}")
+        log.info(f"BODY: {repr(body)}")
+
         r = self.session.put(
             f"{SLSKD_URL}{endpoint}",
             json=body,
             timeout=20
         )
+
+        log.info(f"HTTP {r.status_code}")
+
+        if r.text:
+            log.info(f"Response: {r.text}")
+
+        r.raise_for_status()
+
+        return r
 
         log.info(
             f"PUT {endpoint} -> HTTP {r.status_code}"
@@ -113,13 +125,29 @@ class SlskdAPI:
 
         try:
 
-            r = self.post(
-                f"/api/v0/conversations/{username}",
-                message
+            r = self.session.post(
+                f"{SLSKD_URL}/api/v0/conversations/{username}",
+                json=message,
+                timeout=20
             )
 
             log.info(
-                f"Sent message to {username} (HTTP {r.status_code})"
+                f"POST /conversations/{username} -> {r.status_code}"
+            )
+
+            if r.text:
+                log.info(r.text)
+
+            r.raise_for_status()
+
+
+            if r.status_code != 201:
+                log.warning(
+                    f"Unexpected status code {r.status_code} while sending message to {username}"
+                )
+
+            log.info(
+                f"Sent message to {username}"
             )
 
             return True
