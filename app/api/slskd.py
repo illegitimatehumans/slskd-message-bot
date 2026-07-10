@@ -113,13 +113,13 @@ class SlskdAPI:
 
         try:
 
-            self.post(
+            r = self.post(
                 f"/api/v0/conversations/{username}",
                 message
             )
 
             log.info(
-                f"Sent message to {username}"
+                f"Sent message to {username} (HTTP {r.status_code})"
             )
 
             return True
