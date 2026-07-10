@@ -1,4 +1,5 @@
 import requests
+from requests.exceptions import ReadTimeout, HTTPError
 
 from app.config import (
     SLSKD_URL,
@@ -38,9 +39,16 @@ class SlskdAPI:
             timeout=20
         )
 
+        log.info(
+            f"PUT {endpoint} -> HTTP {r.status_code}"
+        )
+
+        if r.text:
+            log.info(f"Response: {r.text}")
+
         r.raise_for_status()
 
-        return True
+        return r
 
     def get_application(self):
 
@@ -58,10 +66,26 @@ class SlskdAPI:
                 f"/api/v0/users/{username}/browse"
             )
 
+        except ReadTimeout:
+
+            log.warning(
+                f"{username}: Browse request timed out."
+            )
+
+            return None
+
+        except HTTPError as e:
+
+            log.warning(
+                f"{username}: Browse HTTP error: {e}"
+            )
+
+            return None
+
         except Exception as e:
 
             log.warning(
-                f"Browse failed for {username}: {e}"
+                f"{username}: Browse failed: {e}"
             )
 
             return None

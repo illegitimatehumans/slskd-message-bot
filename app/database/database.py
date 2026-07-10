@@ -1,7 +1,10 @@
 import sqlite3
 from datetime import datetime, timedelta
 
-from app.config import DATABASE
+from app.config import (
+    DATABASE,
+    GOOD_RECHECK_MINUTES,
+)
 
 conn = sqlite3.connect(DATABASE, check_same_thread=False)
 
@@ -133,4 +136,7 @@ def needs_recheck(username):
 
     checked = datetime.fromisoformat(user["last_checked"])
 
-    return datetime.utcnow() - checked > timedelta(hours=24)
+    return (
+    datetime.utcnow() - checked
+    > timedelta(minutes=GOOD_RECHECK_MINUTES)
+)
