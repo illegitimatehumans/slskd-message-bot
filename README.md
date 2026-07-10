@@ -1,20 +1,27 @@
 # slskd-message-bot
 
-A Python bot for slskd that monitors active uploads and sends a one-time private message to users who don't meet the configured sharing requirements.
+slskd-message-bot is a companion service for slskd that monitors active uploads and sends a one-time private message to users who don't meet your configured sharing requirements.
 
-This project was built for my own Soulseek server running as part of the OwlTV media stack. The goal is to encourage sharing and help keep the Soulseek community healthy without repeatedly messaging the same users.
+It is designed to complement slskd's built-in transfer groups by informing users why their downloads may be limited instead of silently throttling or restricting them.
+
+## Why?
+
+slskd can already identify users with low share counts and apply different transfer limits through transfer groups. What it doesn't do is explain those restrictions to the user.
+
+This bot fills that gap by automatically sending a friendly one-time message that explains your server's sharing policy.
 
 ## Features
 
-- Monitors active uploads through the slskd API
-- Waits for a configurable grace period before checking a user
-- Browses the user's shared library
-- Counts shared files and shared folders
-- Compares those totals against configurable minimums
-- Sends a one-time private message if both thresholds are below the configured limits
-- Stores results in SQLite so users are not messaged repeatedly
-- Supports a whitelist for users that should never be checked
-- Docker ready
+- Monitors active uploads through the slskd REST API
+- Configurable grace period before evaluating users
+- Browses remote user shares
+- Counts shared files and folders
+- Evaluates users against configurable thresholds
+- Sends a one-time private message
+- SQLite database to prevent duplicate messages
+- Automatically creates a customizable message template on first run
+- Whitelist support
+- Docker support
 
 ## Requirements
 
@@ -24,6 +31,22 @@ This project was built for my own Soulseek server running as part of the OwlTV m
 - Python 3.13
 
 ## Installation
+
+## First Run
+
+On first startup the bot automatically creates:
+
+```
+data/message.txt
+```
+
+from:
+
+```
+message.txt.example
+```
+
+You can edit `data/message.txt` at any time without rebuilding the container.
 
 Clone the repository:
 

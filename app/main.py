@@ -7,7 +7,7 @@ from app.services.messenger import ensure_message
 
 print()
 print("=" * 70)
-print(" OwlTV slskd Bot")
+print("slskd-Message-Bot")
 print("=" * 70)
 
 ensure_message()
