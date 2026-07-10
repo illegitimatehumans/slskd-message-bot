@@ -1,26 +1,30 @@
 # slskd-message-bot
 
-slskd-message-bot is a companion service for slskd that monitors active uploads and sends a one-time private message to users who don't meet your configured sharing requirements.
+An automated sharing policy bot for slskd that monitors active uploads, evaluates users against configurable sharing thresholds, and sends a one-time customizable private message to users who don't meet your server's sharing policy.
 
-It is designed to complement slskd's built-in transfer groups by informing users why their downloads may be limited instead of silently throttling or restricting them.
+Designed to complement slskd's built-in transfer groups by explaining *why* a user's downloads may be limited.
+
+## Screenshots
+
+Coming soon.
 
 ## Why?
 
 slskd can already identify users with low share counts and apply different transfer limits through transfer groups. What it doesn't do is explain those restrictions to the user.
 
-This bot fills that gap by automatically sending a friendly one-time message that explains your server's sharing policy.
+This bot fills that gap by automatically sending a friendly one-time message that explains your server's sharing policy. Instead of silently throttling users, the bot tells them what your server expects and how to resolve the issue.
 
 ## Features
 
-- Monitors active uploads through the slskd REST API
-- Configurable grace period before evaluating users
-- Browses remote user shares
-- Counts shared files and folders
-- Evaluates users against configurable thresholds
-- Sends a one-time private message
-- SQLite database to prevent duplicate messages
-- Automatically creates a customizable message template on first run
+- Automatic upload monitoring
+- Configurable grace period
+- Remote share browsing
+- Share threshold evaluation
+- One-time private messages
+- Customizable message templates
+- Dynamic placeholders
 - Whitelist support
+- SQLite database to prevent duplicate messages
 - Docker support
 
 ## Requirements
@@ -118,6 +122,16 @@ MIN_FILES=1000
 MIN_DIRECTORIES=20
 ```
 
+## Message Placeholders
+
+The warning template supports:
+
+- `{username}`
+- `{files}`
+- `{directories}`
+- `{min_files}`
+- `{min_directories}`
+
 ## Warning Policy
 
 The bot only sends a warning when **both** of these conditions are true:
@@ -177,11 +191,29 @@ app/
 └── main.py
 ```
 
+## Environment Variables
+
+| Variable | Description |
+|----------|-------------|
+| SLSKD_URL | URL of your slskd instance |
+| SLSKD_API_KEY | slskd API key |
+| POLL_INTERVAL | Monitoring interval |
+| GRACE_PERIOD | Seconds before evaluating uploads |
+
 ## Notes
 
 The bot uses the slskd REST API and stores its data in a local SQLite database.
 
 The warning message is stored in `message.txt`, so it can be edited without changing the source code.
+
+## Roadmap
+
+- [x] Customizable warning templates
+- [x] Dynamic placeholders
+- [ ] Multiple warning templates
+- [ ] Web dashboard
+- [ ] Optional Discord notifications
+- [ ] Localization
 
 ## License
 
