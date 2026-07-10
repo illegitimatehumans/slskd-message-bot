@@ -1,3 +1,21 @@
+# v1.2.0
+
+## Added
+
+- Customizable warning message templates.
+- Support for dynamic placeholders:
+  - `{username}`
+  - `{files}`
+  - `{directories}`
+  - `{min_files}`
+  - `{min_directories}`
+
+## Improved
+
+- Automatically substitutes placeholder values before sending messages.
+- Added a project changelog.
+- Updated the example warning message template.
+
 # Changelog
 
 All notable changes to this project will be documented in this file.
@@ -15,3 +33,14 @@ All notable changes to this project will be documented in this file.
 
 - Added slskd compatibility notes.
 - Documented the required Conversations API endpoint.
+
+## Roadmap
+
+- [x] One-time warning messages
+- [x] SQLite persistence
+- [x] Configurable message templates
+- [ ] Discord webhook notifications
+- [ ] Multiple warning templates
+- [ ] Placeholder for upload filename
+- [ ] Automatic stale user cleanup
+- [ ] Unit tests
