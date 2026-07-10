@@ -4,9 +4,9 @@ from app.utils.logger import log
 
 
 def evaluate(username):
+    
     """
-    Browse a user and determine whether they meet
-    OwlTV's sharing requirements.
+    Determine whether a user meets the configured sharing policy.
     """
 
     browse = api.browse_user(username)
