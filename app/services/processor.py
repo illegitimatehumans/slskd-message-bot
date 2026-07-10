@@ -91,7 +91,7 @@ def process(user):
         username,
         files,
         directories,
-    )
+    ):
 
         runtime_warned.add(username)
 
