@@ -1,3 +1,7 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
 # v1.2.0
 
 ## Added
@@ -16,9 +20,6 @@
 - Added a project changelog.
 - Updated the example warning message template.
 
-# Changelog
-
-All notable changes to this project will be documented in this file.
 
 ## v1.1.0
 
