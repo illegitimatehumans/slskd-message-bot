@@ -134,10 +134,12 @@ The warning template supports:
 
 ## Warning Policy
 
-The bot only sends a warning when **both** of these conditions are true:
+The bot sends a warning if either of the following conditions is true:
 
-- Shared files are below the configured minimum (`MIN_FILES`)
-- Shared folders are below the configured minimum (`MIN_DIRECTORIES`)
+-Shared files are below the configured minimum (MIN_FILES)
+-Shared folders are below the configured minimum (MIN_DIRECTORIES)
+
+A user must meet both configured minimums to be considered compliant.
 
 By default:
 
