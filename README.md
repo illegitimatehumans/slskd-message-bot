@@ -30,6 +30,16 @@ This bot fills that gap by automatically sending a friendly one-time message tha
 - slskd 0.25 or newer
 - Python 3.13
 
+## slskd Compatibility
+
+This bot uses the Conversations API available in current versions of slskd.
+
+Private messages are sent using:
+
+POST /api/v0/conversations/{username}
+
+If you're running an older version of slskd, check the built-in Swagger documentation (`/swagger`) to verify the messaging endpoint before using the bot.
+
 ## Installation
 
 ## First Run
