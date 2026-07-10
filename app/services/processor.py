@@ -87,7 +87,11 @@ def process(user):
         f"{result['directories']} dirs)"
     )
 
-    if send_warning(username):
+    if send_warning(
+        username,
+        files,
+        directories,
+    )
 
         runtime_warned.add(username)
 
