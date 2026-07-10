@@ -1,4 +1,4 @@
-k# slskd-bot
+# slskd-message-bot
 
 A Python bot for slskd that monitors active uploads and sends a one-time private message to users who don't meet the configured sharing requirements.
 
