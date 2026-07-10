@@ -27,7 +27,7 @@ def evaluate(username):
 
     if (
         files < MIN_FILES
-        and
+        or
         directories < MIN_DIRECTORIES
     ):
         status = "LEECHER"
