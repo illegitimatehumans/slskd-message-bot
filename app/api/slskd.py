@@ -50,6 +50,25 @@ class SlskdAPI:
 
         return r
 
+    def post(self, endpoint, body):
+
+        r = self.session.post(
+            f"{SLSKD_URL}{endpoint}",
+            json=body,
+            timeout=20
+        )
+
+        log.info(
+            f"POST {endpoint} -> HTTP {r.status_code}"
+        )
+
+        if r.text:
+            log.info(f"Response: {r.text}")
+
+        r.raise_for_status()
+
+        return r
+
     def get_application(self):
 
         return self.get("/api/v0/application")
@@ -94,8 +113,8 @@ class SlskdAPI:
 
         try:
 
-            self.put(
-                f"/api/v0/conversations/{username}/messages",
+            self.post(
+                f"/api/v0/conversations/{username}",
                 message
             )
 
