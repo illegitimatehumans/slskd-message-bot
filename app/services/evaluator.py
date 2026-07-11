@@ -1,5 +1,4 @@
 from app.api.slskd import api
-from app.config import MIN_FILES, MIN_DIRECTORIES
 from app.utils.logger import log
 
 
@@ -10,7 +9,7 @@ def evaluate(username):
     """
 
     browse = api.browse_user(username)
-
+    min_files, min_directories = api.get_leecher_thresholds()
     if browse is None:
         return {
             "status": "UNKNOWN",
@@ -26,9 +25,9 @@ def evaluate(username):
     directories = browse.get("directoryCount", 0)
 
     if (
-        files < MIN_FILES
+        files < min_files
         or
-        directories < MIN_DIRECTORIES
+        directories < min_directories
     ):
         status = "LEECHER"
     else:

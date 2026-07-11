@@ -89,8 +89,8 @@ def process(user):
 
     if send_warning(
         username,
-        files,
-        directories,
+        result["files"],
+        result["directories"]
     ):
 
         runtime_warned.add(username)
