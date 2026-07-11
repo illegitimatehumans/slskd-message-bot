@@ -1,52 +1,110 @@
 # slskd-message-bot
 
-An automated sharing policy bot for slskd that monitors active uploads, evaluates users against configurable sharing thresholds, and sends a one-time customizable private message to users who don't meet your server's sharing policy.
+An automated leecher notification bot for **slskd** that monitors active uploads, evaluates users against your server's sharing policy, and sends a friendly one-time private message to users who don't meet your configured sharing requirements.
 
-Designed to complement slskd's built-in transfer groups by explaining *why* a user's downloads may be limited.
+Designed to complement **slskd** transfer groups by explaining *why* downloads may be limited instead of silently throttling users.
 
-## Screenshots
+---
 
-Coming soon.
-
-## Why?
-
-slskd can already identify users with low share counts and apply different transfer limits through transfer groups. What it doesn't do is explain those restrictions to the user.
-
-This bot fills that gap by automatically sending a friendly one-time message that explains your server's sharing policy. Instead of silently throttling users, the bot tells them what your server expects and how to resolve the issue.
-
-## Features
+# Features
 
 - Automatic upload monitoring
 - Configurable grace period
 - Remote share browsing
-- Share threshold evaluation
 - One-time private messages
-- Customizable message templates
+- Customizable warning message templates
 - Dynamic placeholders
-- Whitelist support
-- SQLite database to prevent duplicate messages
+  - `{username}`
+  - `{files}`
+  - `{directories}`
+  - `{min_files}`
+  - `{min_directories}`
+- Automatically reads live sharing thresholds from slskd
+- SQLite database prevents duplicate warnings
 - Docker support
 
-## Requirements
+---
+
+# Why?
+
+slskd can already identify low-share users and place them into transfer groups with different upload limits.
+
+What it doesn't do is explain those restrictions.
+
+This bot automatically sends a one-time private message informing the user:
+
+- why they were flagged
+- what your minimum sharing requirements are
+- how to become compliant
+
+The result is a better user experience and fewer confused users asking why their downloads are slow.
+
+---
+
+# Screenshots
+
+Coming soon.
+
+---
+
+# Requirements
 
 - Docker
 - Docker Compose
-- slskd 0.25 or newer
 - Python 3.13
+- slskd 0.25+
 
-## slskd Compatibility
+---
 
-This bot uses the Conversations API available in current versions of slskd.
+# slskd Compatibility
 
-Private messages are sent using:
+This project uses the current documented slskd REST API.
 
+### Private Messages
+
+```
 POST /api/v0/conversations/{username}
+```
 
-If you're running an older version of slskd, check the built-in Swagger documentation (`/swagger`) to verify the messaging endpoint before using the bot.
+### Live Configuration
 
-## Installation
+```
+GET /api/v0/options
+```
 
-## First Run
+The bot automatically reads the configured leecher thresholds directly from slskd, ensuring warning messages always match the server configuration.
+
+If you're running an older version of slskd, check `/swagger` to verify the available endpoints.
+
+---
+
+# Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/illegitimatehumans/slskd-bot.git
+
+cd slskd-bot
+```
+
+Copy the example environment:
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` with your own slskd settings.
+
+Build and start:
+
+```bash
+docker compose up -d --build
+```
+
+---
+
+# First Run
 
 On first startup the bot automatically creates:
 
@@ -62,69 +120,35 @@ message.txt.example
 
 You can edit `data/message.txt` at any time without rebuilding the container.
 
-Clone the repository:
+---
 
-```bash
-git clone https://github.com/illegitimatehumans/slskd-bot.git
-cd slskd-bot
-```
-Copy the example environment file:
-
-```bash
-cp .env.example .env
-```
-
-Edit `.env` with your own settings.
-
-On first startup, the bot automatically creates `data/message.txt` from `message.txt.example` if it doesn't already exist. You can edit `data/message.txt` at any time without rebuilding the container.
-
-Edit both files as needed before starting the bot.
-
-Edit `.env` with your own slskd settings.
-
-Build and start the container:
-
-```bash
-docker compose up -d --build
-```
-
-## Configuration
-
-Configuration is handled through the `.env` file.
+# Configuration
 
 Example:
 
 ```env
-# URL of your slskd instance
-
-# Docker Compose
-# SLSKD_URL=http://slskd:5030
-
-# Local installation
-# SLSKD_URL=http://localhost:5030
-
-# Remote server
-# SLSKD_URL=http://192.168.1.100:5030
-
 SLSKD_URL=http://slskd:5030
-
-# slskd API key
 SLSKD_API_KEY=YOUR_API_KEY
 
-# How often to check for uploads (seconds)
 CHECK_INTERVAL=60
-
-# Seconds to wait before evaluating a user
 GRACE_PERIOD=120
-
-# Minimum sharing requirements
-MIN_FILES=1000
-MIN_DIRECTORIES=20
 ```
 
-## Message Placeholders
+### Notes
 
-The warning template supports:
+The bot now reads the configured leecher thresholds directly from the running slskd server using:
+
+```
+GET /api/v0/options
+```
+
+This means warning messages automatically stay synchronized with your slskd configuration.
+
+---
+
+# Message Templates
+
+The warning template supports the following placeholders:
 
 - `{username}`
 - `{files}`
@@ -132,57 +156,44 @@ The warning template supports:
 - `{min_files}`
 - `{min_directories}`
 
-## Warning Policy
-
-A user must meet **both** configured sharing requirements to be considered compliant.
-
-The bot sends a warning if **either** of the following conditions is true:
-
-- Shared files are below the configured minimum (`MIN_FILES`)
-- Shared folders are below the configured minimum (`MIN_DIRECTORIES`)
-
-By default:
-
-```env
-MIN_FILES=1000
-MIN_DIRECTORIES=20
-```
-
-These values should match the thresholds configured in your `slskd.yml` if you're using slskd's transfer groups.
-
 Example:
 
-```yaml
-transfers:
-  groups:
-    leechers:
-      thresholds:
-        files: 1000
-        directories: 20
-      upload:
-        priority: 999
-        strategy: roundrobin
-        slots: 1
-        speed_limit: 100
-        limits:
-          queued:
-            files: 15
-            megabytes: 150
-          daily:
-            files: 30
-            megabytes: 300
-            failures: 10
-          weekly:
-            files: 150
-            megabytes: 1500
-            failures: 30
+```text
+Hello {username},
+
+Your current Soulseek shares appear to be below this server's minimum sharing requirements.
+
+Current shares
+
+• {files} files
+• {directories} folders
+
+Minimum recommended
+
+• {min_files} shared files
+• {min_directories} shared folders
+
+Thank you for contributing to the Soulseek community!
 ```
 
-The bot does **not** enforce upload restrictions. It simply checks whether a user falls below the configured sharing thresholds and sends a one-time private message.
+---
 
-Any upload limits, queue limits, or bandwidth restrictions are handled entirely by slskd through its transfer group configuration.
+# Warning Policy
 
-## Project Structure
+A user must satisfy **both** configured sharing requirements.
+
+A warning is sent when **either** condition is true:
+
+- shared files are below the configured minimum
+- shared directories are below the configured minimum
+
+The bot **does not** enforce upload restrictions.
+
+Upload limits, priorities, bandwidth limits, and queue restrictions remain entirely managed by slskd transfer groups.
+
+---
+
+# Project Structure
 
 ```
 app/
@@ -193,30 +204,31 @@ app/
 └── main.py
 ```
 
-## Environment Variables
+---
+
+# Environment Variables
 
 | Variable | Description |
-|----------|-------------|
+|-----------|-------------|
 | SLSKD_URL | URL of your slskd instance |
 | SLSKD_API_KEY | slskd API key |
-| POLL_INTERVAL | Monitoring interval |
-| GRACE_PERIOD | Seconds before evaluating uploads |
+| CHECK_INTERVAL | Seconds between upload scans |
+| GRACE_PERIOD | Seconds before evaluating a new uploader |
 
-## Notes
+---
 
-The bot uses the slskd REST API and stores its data in a local SQLite database.
-
-The warning message is stored in `message.txt`, so it can be edited without changing the source code.
-
-## Roadmap
+# Roadmap
 
 - [x] Customizable warning templates
 - [x] Dynamic placeholders
+- [x] Live slskd threshold detection
 - [ ] Multiple warning templates
+- [ ] Discord notifications
 - [ ] Web dashboard
-- [ ] Optional Discord notifications
 - [ ] Localization
 
-## License
+---
+
+# License
 
 MIT
