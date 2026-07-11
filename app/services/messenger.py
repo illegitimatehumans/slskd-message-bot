@@ -2,7 +2,6 @@ from pathlib import Path
 import shutil
 
 from app.api.slskd import api
-from app.config import MIN_FILES, MIN_DIRECTORIES
 from app.utils.logger import log
 
 DATA_DIR = Path("/app/data")
@@ -35,13 +34,15 @@ def load_message():
 
 def send_warning(username, files, directories):
 
+    min_files, min_directories = api.get_leecher_thresholds()
+
     message = (
         load_message()
         .replace("{username}", username)
         .replace("{files}", str(files))
         .replace("{directories}", str(directories))
-        .replace("{min_files}", str(MIN_FILES))
-        .replace("{min_directories}", str(MIN_DIRECTORIES))
+        .replace("{min_files}", str(min_files))
+        .replace("{min_directories}", str(min_directories))
     )
 
     log.info(f"Sending warning to {username}")
