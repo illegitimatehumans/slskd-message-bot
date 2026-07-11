@@ -2,9 +2,35 @@
 
 All notable changes to this project will be documented in this file.
 
-# v1.2.0
+## v1.3.0
 
-## Added
+### Added
+
+- Warning message templates now support:
+  - `{username}`
+  - `{files}`
+  - `{directories}`
+  - `{min_files}`
+  - `{min_directories}`
+
+### Improved
+
+- Leecher thresholds are now read directly from the live slskd API (`/api/v0/options`).
+- Warning messages automatically reflect the current slskd configuration.
+- Removed duplicate threshold configuration for message generation.
+
+### Fixed
+
+- Updated messaging to use the current Conversations API:
+  `POST /api/v0/conversations/{username}`
+- Improved compatibility with current versions of slskd.
+- Improved logging and warning delivery.
+
+---
+
+## v1.2.0
+
+### Added
 
 - Customizable warning message templates.
 - Support for dynamic placeholders:
@@ -14,12 +40,13 @@ All notable changes to this project will be documented in this file.
   - `{min_files}`
   - `{min_directories}`
 
-## Improved
+### Improved
 
 - Automatically substitutes placeholder values before sending messages.
 - Added a project changelog.
 - Updated the example warning message template.
 
+---
 
 ## v1.1.0
 
@@ -34,14 +61,3 @@ All notable changes to this project will be documented in this file.
 
 - Added slskd compatibility notes.
 - Documented the required Conversations API endpoint.
-
-## Roadmap
-
-- [x] One-time warning messages
-- [x] SQLite persistence
-- [x] Configurable message templates
-- [ ] Discord webhook notifications
-- [ ] Multiple warning templates
-- [ ] Placeholder for upload filename
-- [ ] Automatic stale user cleanup
-- [ ] Unit tests
