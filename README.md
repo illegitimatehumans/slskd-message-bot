@@ -22,6 +22,7 @@ Designed to complement **slskd** transfer groups by explaining *why* downloads m
 
 ---
 
+
 # Why?
 
 slskd can already identify low-share users and place them into transfer groups with different upload limits.
