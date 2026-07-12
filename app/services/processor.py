@@ -27,12 +27,6 @@ def process(user):
         log.info(f"{username}: Whitelisted")
         return
 
-    if user["seconds"] < GRACE_PERIOD:
-        log.info(
-            f"{username}: Waiting for grace period "
-            f"({user['seconds']} / {GRACE_PERIOD}s)"
-        )
-        return
 
     if username in runtime_warned:
         log.info(f"{username}: Already warned this runtime")
@@ -44,7 +38,15 @@ def process(user):
         return
 
     cached = get_user(username)
-
+    if (
+        cached
+        and user["seconds"] < GRACE_PERIOD
+    ):
+        log.info(
+            f"{username}: Waiting for grace period "
+            f"({user['seconds']} / {GRACE_PERIOD}s)"
+        )
+        return
     if (
         cached
         and cached["status"] == "GOOD"
