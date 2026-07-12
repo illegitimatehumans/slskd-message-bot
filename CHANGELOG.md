@@ -2,7 +2,51 @@
 
 All notable changes to this project will be documented in this file.
 
-## v1.3.0
+The format is based on Keep a Changelog and this project adheres to Semantic Versioning.
+
+---
+
+## [1.3.2] - 2026-07-12
+
+### Added
+
+- Configurable browse retry timing using `BROWSE_RETRY_DELAYS`.
+- Support for custom retry schedules such as `2,5,10`.
+- Automatic retry attempt count based on the configured delay list.
+
+### Changed
+
+- Browse retry behavior is now fully configurable through the `.env` file.
+- Improved retry logging to reflect configured retry attempts and delays.
+- Updated the README, `.env.example`, and roadmap documentation.
+
+### Removed
+
+- Removed hardcoded browse retry count.
+- Removed hardcoded browse retry delay.
+
+---
+
+## [1.3.1] - 2026-07-12
+
+### Added
+
+- Automatic retry logic for failed user browse requests.
+- Up to three browse attempts before marking a user as `UNKNOWN`.
+- Detailed browse attempt logging.
+
+### Improved
+
+- More reliable evaluation of first-time uploaders.
+- Reduced false `UNKNOWN` results caused by temporary browse failures.
+
+### Fixed
+
+- Temporary browse failures no longer immediately abort user evaluation.
+
+---
+
+## [1.3.0] - 2026-07-11
 
 ### Added
 
@@ -21,43 +65,20 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
-- Updated messaging to use the current Conversations API:
-  `POST /api/v0/conversations/{username}`
+- Updated messaging to use the current Conversations API (`POST /api/v0/conversations/{username}`).
 - Improved compatibility with current versions of slskd.
 - Improved logging and warning delivery.
 
 ---
 
-## v1.2.0
+## [1.2.0] - 2026-07-11
 
 ### Added
 
-- Customizable warning message templates.
-- Support for dynamic placeholders:
-  - `{username}`
-  - `{files}`
-  - `{directories}`
-  - `{min_files}`
-  - `{min_directories}`
-
-### Improved
-
-- Automatically substitutes placeholder values before sending messages.
-- Added a project changelog.
-- Updated the example warning message template.
-
----
-
-## v1.1.0
-
-### Fixed
-
-- Updated private messaging to use the documented Conversations API.
-- Replaced the legacy messaging endpoint with:
-  `POST /api/v0/conversations/{username}`
-- Improved message delivery logging.
-
-### Documentation
-
-- Added slskd compatibility notes.
-- Documented the required Conversations API endpoint.
+- Initial public release.
+- Automatic upload monitoring.
+- Share threshold evaluation.
+- One-time warning messages.
+- Docker support.
+- SQLite database for warning history.
+- Configurable message templates.
