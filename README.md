@@ -1,6 +1,6 @@
 # slskd-message-bot
 
-An automated leecher notification bot for **slskd** that monitors active uploads, evaluates users against your server's sharing policy, and sends a friendly one-time private message to users who don't meet your configured sharing requirements.
+An automated sharing policy bot for slskd that monitors active uploads, intelligently evaluates users against configurable sharing thresholds, retries temporary browse failures, and sends a one-time customizable private message to users who don't meet your server's sharing policy.
 
 Designed to complement **slskd** transfer groups by explaining *why* downloads may be limited instead of silently throttling users.
 
@@ -11,16 +11,13 @@ Designed to complement **slskd** transfer groups by explaining *why* downloads m
 - Automatic upload monitoring
 - Configurable grace period
 - Remote share browsing
+- Share threshold evaluation
 - One-time private messages
-- Customizable warning message templates
+- Configurable browse retry backoff
+- Customizable message templates
 - Dynamic placeholders
-  - `{username}`
-  - `{files}`
-  - `{directories}`
-  - `{min_files}`
-  - `{min_directories}`
-- Automatically reads live sharing thresholds from slskd
-- SQLite database prevents duplicate warnings
+- Whitelist support
+- SQLite database to prevent duplicate messages
 - Docker support
 
 ---
@@ -131,7 +128,14 @@ SLSKD_URL=http://slskd:5030
 SLSKD_API_KEY=YOUR_API_KEY
 
 CHECK_INTERVAL=60
+
 GRACE_PERIOD=120
+
+# Browse retry delays (seconds)
+BROWSE_RETRY_DELAYS=2,5,10
+
+MIN_FILES=1000
+MIN_DIRECTORIES=20
 ```
 
 ### Notes
@@ -143,6 +147,29 @@ GET /api/v0/options
 ```
 
 This means warning messages automatically stay synchronized with your slskd configuration.
+
+## Browse Retry
+
+Some users may not respond to an initial browse request immediately.
+
+The bot retries failed browse requests before marking a user as `UNKNOWN`.
+
+Configure the delay between retries using:
+
+```env
+BROWSE_RETRY_DELAYS=2,5,10
+```
+
+The example above behaves as follows:
+
+| Attempt | Action |
+|---------|--------|
+| 1 | Browse immediately |
+| 2 | Retry after 2 seconds |
+| 3 | Retry after 5 seconds |
+| 4 | Retry after 10 seconds |
+
+The number of retries is determined automatically from the configured delay list.
 
 ---
 
