@@ -11,8 +11,9 @@ The project follows semantic versioning, but priorities may change based on user
 ## Improve uploader evaluation
 
 - [x] Evaluate first-time uploaders immediately
-- [ ] Retry browse requests after short delays when they fail
+- [x] Retry browse requests after short delays when they fail
 - [ ] Configurable retry/backoff timing
+- [x] Smart browse caching
 - [ ] Reduce unnecessary browse requests
 
 ## Configuration
@@ -22,7 +23,7 @@ The project follows semantic versioning, but priorities may change based on user
 - [ ] Additional runtime configuration options
 
 ## Logging
-
+- [x] Imporved browse attempt logging
 - [ ] Better warning summaries
 - [ ] Debug logging mode
 - [ ] Log rotation support
@@ -71,7 +72,7 @@ Planned metrics:
 - [ ] Compliance rate
 - [ ] Average time until compliance
 - [ ] Historical trends
-
+- [ ] Warning effectiveness
 ---
 
 # Discord Integration
@@ -114,14 +115,14 @@ Possible future web dashboard.
 - [ ] LEECHER
 - [ ] UNKNOWN
 - [ ] WARNED
-
+- [ ] COMPLIANT
 ## Statistics
 
 - [ ] Charts
 - [ ] Compliance graphs
 - [ ] Browse failures
 - [ ] Historical activity
-
+- [ ] Upload activity timeline
 ---
 
 # Administration
@@ -169,6 +170,16 @@ Potential improvements:
 - [ ] Discord
 
 ---
+# Future Vision
+
+The long-term goal is to make **slskd-message-bot** the companion application for slskd sharing policy management.
+
+Future releases will focus on:
+
+- Encouraging healthy sharing
+- Providing meaningful analytics
+- Integrating with existing self-hosted tools
+- Remaining lightweight and easy to deploy
 
 # Guiding Principles
 
