@@ -12,7 +12,7 @@ The project follows semantic versioning, but priorities may change based on user
 
 - [x] Evaluate first-time uploaders immediately
 - [x] Retry browse requests after short delays when they fail
-- [ ] Configurable retry/backoff timing
+- [x] Configurable retry/backoff timing
 - [ ] Smart browse caching
 - [ ] Reduce unnecessary browse requests
 
