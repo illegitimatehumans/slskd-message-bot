@@ -6,6 +6,14 @@ SLSKD_API_KEY = os.getenv("SLSKD_API_KEY")
 CHECK_INTERVAL = int(os.getenv("CHECK_INTERVAL", "60"))
 GRACE_PERIOD = int(os.getenv("GRACE_PERIOD", "120"))
 
+BROWSE_RETRY_DELAYS = [
+    int(delay)
+    for delay in os.getenv(
+        "BROWSE_RETRY_DELAYS",
+        "2,5,10"
+    ).split(",")
+]
+
 MIN_FILES = int(os.getenv("MIN_FILES", "1000"))
 MIN_DIRECTORIES = int(os.getenv("MIN_DIRECTORIES", "20"))
 

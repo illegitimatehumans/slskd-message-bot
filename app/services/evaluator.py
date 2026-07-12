@@ -1,6 +1,9 @@
 from time import sleep
 
 from app.api.slskd import api
+from app.config import (
+    BROWSE_RETRY_DELAYS,
+)
 from app.utils.logger import log
 
 
@@ -13,10 +16,12 @@ def evaluate(username):
 
     browse = None
 
-    for attempt in range(1, 4):
+    max_attempts = len(BROWSE_RETRY_DELAYS) + 1
+
+    for attempt in range(1, max_attempts + 1):
 
         log.info(
-            f"{username}: Browse attempt {attempt}/3"
+            f"{username}: Browse attempt {attempt}/{max_attempts}"
         )
 
         browse = api.browse_user(username)
@@ -29,18 +34,19 @@ def evaluate(username):
 
         break
 
-        if attempt < 3:
-
+        if attempt < max_attempts:
+            delay = BROWSE_RETY_DELAYS[ATTEMPT - 1]
             log.warning(
-                f"{username}: Browse attempt {attempt} failed, retrying in 3 seconds..."
+                f"{username}: Browse attempt {attempt}/{max_attempts} failed,"
+                f"retrying in {delay} seconds..."
             )
 
-            sleep(3)
+            sleep(delay)
 
         if browse is None:
 
             log.warning(
-                f"{username}: Browse failed after 3 attempts"
+                f"{username}: Browse failed after {max_attempts} attempts"
             )
 
         return {
