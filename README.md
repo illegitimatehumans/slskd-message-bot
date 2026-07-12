@@ -244,18 +244,6 @@ app/
 
 ---
 
-# Roadmap
-
-- [x] Customizable warning templates
-- [x] Dynamic placeholders
-- [x] Live slskd threshold detection
-- [ ] Multiple warning templates
-- [ ] Discord notifications
-- [ ] Web dashboard
-- [ ] Localization
-
----
-
 # License
 
 MIT
