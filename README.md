@@ -1,7 +1,9 @@
 # slskd-message-bot
-
+![Docker](https://img.shields.io/badge/Container-GHCR-blue)
+![Python](https://img.shields.io/badge/Python-3.13-blue)
+![License](https://img.shields.io/github/license/illegitimatehumans/slskd-message-bot)
+![Release](https://img.shields.io/github/v/release/illegitimatehumans/slskd-message-bot)
 An automated sharing policy bot for slskd that monitors active uploads, intelligently evaluates users against configurable sharing thresholds, retries temporary browse failures, and sends a one-time customizable private message to users who don't meet your server's sharing policy.
-
 Designed to complement **slskd** transfer groups by explaining *why* downloads may be limited instead of silently throttling users.
 
 ---
