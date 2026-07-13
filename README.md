@@ -50,7 +50,6 @@ The bot automatically monitors active uploads, evaluates users against your shar
 ## Warning Message
 
 Coming Soon!
-![Warning Message](assets-warning-message.png)
 
 Sends a friendly, customizable private message explaining your server's sharing policy.
 
