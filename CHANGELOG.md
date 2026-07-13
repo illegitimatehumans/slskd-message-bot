@@ -4,7 +4,31 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog and this project adheres to Semantic Versioning.
 
+
 ---
+## [1.4.1] - 2026-07-13
+
+### Added
+
+- Automated Docker image publishing with GitHub Actions.
+- GitHub Container Registry (GHCR) support.
+- Production Docker Compose configuration using published container images.
+- Development Docker Compose configuration for local image builds.
+
+### Changed
+
+- Split Docker Compose into production and development configurations.
+- Updated deployment workflow to support image-based installs from GHCR.
+- Improved browse retry logging to reduce unnecessary log messages.
+
+### Fixed
+
+- Corrected retry logic to properly retry failed browse requests before returning `UNKNOWN`.
+- Fixed variable name typos affecting the browse retry path.
+- Corrected README screenshot paths and Docker documentation.
+
+
+
 ## [1.3.3] - 2026-07-12
 
 ### Added
