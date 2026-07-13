@@ -1,6 +1,6 @@
 services:
   slskd-bot:
-    image: ghcr.io/illegitimatehumans/slskd-message-bot:latest
+    build: .
     container_name: slskd-bot
 
     restart: unless-stopped

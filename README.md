@@ -255,6 +255,22 @@ app/
 | CHECK_INTERVAL | Seconds between upload scans |
 | GRACE_PERIOD | Seconds before evaluating a new uploader |
 
+
+## Docker
+
+### Production
+```bash
+docker compose pull
+docker compose up -d
+```
+
+Uses the latest image published to GitHub Container Registry.
+
+### Development
+```bash
+docker compose -f docker-compose.dev.yml up -d --build
+```
+Builds the image locally for development.
 ---
 ## AI Disclosure
 
