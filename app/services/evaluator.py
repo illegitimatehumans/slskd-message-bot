@@ -28,15 +28,17 @@ def evaluate(username):
 
         if browse is not None:
 
-            log.info(
-                f"{username}: Browse succeeded on attempt {attempt}"
-            )
+            if attempt > 1:
+
+                log.info(
+                    f"{username}: Browse succeeded on attempt {attempt}"
+                )
 
             break
 
         if attempt < max_attempts:
 
-            delay = BROWSE_RETRY_DELAYS[ATTEMPT - 1]
+            delay = BROWSE_RETRY_DELAYS[attempt - 1]
 
             log.warning(
                 f"{username}: Browse attempt {attempt}/{max_attempts} failed, "
@@ -45,11 +47,11 @@ def evaluate(username):
 
             sleep(delay)
 
-        if browse is None:
+    if browse is None:
 
-            log.warning(
-                f"{username}: Browse failed after {max_attempts} attempts"
-            )
+        log.warning(
+            f"{username}: Browse failed after {max_attempts} attempts"
+        )
 
         return {
             "status": "UNKNOWN",
