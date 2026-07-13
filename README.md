@@ -41,7 +41,18 @@ The result is a better user experience and fewer confused users asking why their
 
 # Screenshots
 
-Coming soon.
+## Upload Evaluation
+
+The bot automatically monitors active uploads, evaluates users against your sharing policy, and logs the results.
+
+![Upload Evaluation](assets-upload-evaluation.png)
+
+## Warning Message
+
+Coming Soon!
+![Warning Message](assets-warning-message.png)
+
+Sends a friendly, customizable private message explaining your server's sharing policy.
 
 ---
 
