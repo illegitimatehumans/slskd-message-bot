@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from app.config import (
     DATABASE,
     GOOD_RECHECK_MINUTES,
+    LEECHER_RECHECK_MINUTES,
 )
 
 conn = sqlite3.connect(DATABASE, check_same_thread=False)
@@ -136,7 +137,12 @@ def needs_recheck(username):
 
     checked = datetime.fromisoformat(user["last_checked"])
 
+    if user["status"] == "LEECHER":
+        interval = LEECHER_RECHECK_MINUTES
+    else:
+        interval = GOOD_RECHECK_MINUTES
+
     return (
-    datetime.utcnow() - checked
-    > timedelta(minutes=GOOD_RECHECK_MINUTES)
-)
+        datetime.utcnow() - checked
+        > timedelta(minutes=interval)
+    )

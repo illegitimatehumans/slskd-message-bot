@@ -28,16 +28,18 @@ def evaluate(username):
 
         if browse is not None:
 
-         log.info(
-             f"{username}: Browse succeeded on attempt {attempt}"
-        )
+            log.info(
+                f"{username}: Browse succeeded on attempt {attempt}"
+            )
 
-        break
+            break
 
         if attempt < max_attempts:
+
             delay = BROWSE_RETY_DELAYS[ATTEMPT - 1]
+
             log.warning(
-                f"{username}: Browse attempt {attempt}/{max_attempts} failed,"
+                f"{username}: Browse attempt {attempt}/{max_attempts} failed, "
                 f"retrying in {delay} seconds..."
             )
 

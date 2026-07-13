@@ -49,10 +49,17 @@ def process(user):
         return
     if (
         cached
-        and cached["status"] == "GOOD"
+        and cached["status"] in ("GOOD", "LEECHER")
         and not needs_recheck(username)
     ):
-        log.info(f"{username}: Cached GOOD - skipping")
+        log.info(f"{username}: Cached GOOD - skipping browse"
+
+        )
+
+        if cached["status"] == "LEECHER":
+            log.info(
+                f"{username}: Previously evaluated as a leecher"
+            )
         return
 
     log.info(f"{username}: Evaluating")

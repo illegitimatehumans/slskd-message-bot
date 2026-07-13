@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on Keep a Changelog and this project adheres to Semantic Versioning.
 
 ---
+## [1.3.3] - 2026-07-12
+
+### Added
+
+- Smart browse caching.
+- Separate cache lifetimes for GOOD and LEECHER users.
+- `GOOD_RECHECK_MINUTES` configuration.
+- `LEECHER_RECHECK_MINUTES` configuration.
+
+### Improved
+
+- Reduced unnecessary browse requests.
+- Status-aware cache expiration.
+
 
 ## [1.3.2] - 2026-07-12
 
