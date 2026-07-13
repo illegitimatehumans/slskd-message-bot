@@ -45,7 +45,7 @@ The result is a better user experience and fewer confused users asking why their
 
 The bot automatically monitors active uploads, evaluates users against your sharing policy, and logs the results.
 
-![Upload Evaluation](assets-upload-evaluation.png)
+![Upload Evaluation](assets/assets-upload-evaluation.png)
 
 ## Warning Message
 
