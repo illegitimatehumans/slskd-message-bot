@@ -244,6 +244,22 @@ app/
 | GRACE_PERIOD | Seconds before evaluating a new uploader |
 
 ---
+## AI Disclosure
+
+This project was developed by a human using AI-assisted programming tools.
+
+AI was used to help with:
+
+- Brainstorming features and implementation ideas
+- Reviewing and refactoring code
+- Explaining APIs and debugging issues
+- Improving documentation and release notes
+- Writing and editing portions of the README and roadmap
+
+All architecture, design decisions, testing, and final code review were performed by the project maintainer. Every code change was reviewed, modified as needed, and tested before being included in the project.
+
+AI assistance was used as a development tool, not as a replacement for human judgment.
+
 
 # License
 
