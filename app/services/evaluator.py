@@ -36,7 +36,7 @@ def evaluate(username):
 
         if attempt < max_attempts:
 
-            delay = BROWSE_RETY_DELAYS[ATTEMPT - 1]
+            delay = BROWSE_RETRY_DELAYS[ATTEMPT - 1]
 
             log.warning(
                 f"{username}: Browse attempt {attempt}/{max_attempts} failed, "
