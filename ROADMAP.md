@@ -1,36 +1,31 @@
 # slskd-message-bot Roadmap
 
-This roadmap outlines planned improvements and future ideas for **slskd-message-bot**.
+This roadmap outlines planned improvements and the long-term direction of **slskd-message-bot**.
 
-The project follows semantic versioning, but priorities may change based on user feedback and changes to the slskd API.
+The project follows **Semantic Versioning (SemVer)**, but priorities may change based on community feedback and future changes to the **slskd** API.
 
 ---
 
-# v1.3.x
+# v1.3.x — Uploader Evaluation
+**Status:** ✅ Complete
 
-## Improve uploader evaluation
+The focus of the v1.3.x series was making uploader evaluation faster, smarter, and more reliable.
+
+## Completed
 
 - [x] Evaluate first-time uploaders immediately
-- [x] Retry browse requests after short delays when they fail
-- [x] Configurable retry/backoff timing
-- [ ] Smart browse caching
-- [ ] Reduce unnecessary browse requests
-
-## Configuration
-
-- [ ] Move whitelist to `data/whitelist.txt`
-- [ ] Configurable blacklist file
-- [ ] Additional runtime configuration options
-
-## Logging
-- [x] Imporved browse attempt logging
-- [ ] Better warning summaries
-- [ ] Debug logging mode
-- [ ] Log rotation support
+- [x] Retry failed browse requests automatically
+- [x] Configurable browse retry backoff
+- [x] Smart browse caching
+- [x] Reduce unnecessary browse requests
+- [x] Dynamic threshold synchronization from the slskd API
+- [x] Improved browse logging
 
 ---
 
-# v1.4.0
+# v1.4.0 — Statistics & Compliance Tracking
+
+The next major milestone focuses on measuring how effective your sharing policy actually is.
 
 ## Statistics
 
@@ -39,15 +34,16 @@ The project follows semantic versioning, but priorities may change based on user
 - [ ] LEECHERS detected
 - [ ] Browse failures
 - [ ] Warnings sent
+- [ ] Browse success rate
 - [ ] Average browse time
 
 ## Compliance Tracking
 
 One of the primary goals of the bot is encouraging users to share.
 
-Future releases will track whether warned users later become compliant.
+Future releases will measure whether users improve after receiving a warning.
 
-Example statistics:
+Example:
 
 ```
 Users Evaluated:          2,384
@@ -65,7 +61,7 @@ Compliance Rate:          37.9%
 Average Time to Comply:   3.2 days
 ```
 
-Planned metrics:
+### Planned Metrics
 
 - [ ] Total warnings sent
 - [ ] Users who became compliant
@@ -73,20 +69,34 @@ Planned metrics:
 - [ ] Average time until compliance
 - [ ] Historical trends
 - [ ] Warning effectiveness
+
 ---
 
-# Discord Integration
+# Configuration
 
-- [ ] Warning notifications
-- [ ] User became compliant notification
-- [ ] Daily statistics summary
-- [ ] Rich Discord embeds
+Future configuration improvements.
+
+- [ ] Move whitelist to `data/whitelist.txt`
+- [ ] Configurable blacklist file
+- [ ] Additional runtime configuration options
+- [ ] Runtime configuration validation
+
+---
+
+# Logging
+
+Improve diagnostics and troubleshooting.
+
+- [ ] Better warning summaries
+- [ ] Debug logging mode
+- [ ] Log rotation support
+- [ ] Performance timing logs
 
 ---
 
 # Message Templates
 
-## Current placeholders
+## Current Placeholders
 
 - [x] `{username}`
 - [x] `{files}`
@@ -94,7 +104,7 @@ Planned metrics:
 - [x] `{min_files}`
 - [x] `{min_directories}`
 
-## Planned placeholders
+## Planned Placeholders
 
 - [ ] `{speed_limit}`
 - [ ] `{daily_limit}`
@@ -105,9 +115,9 @@ Planned metrics:
 
 ---
 
-# Dashboard
+# Web Dashboard
 
-Possible future web dashboard.
+An optional dashboard for monitoring server activity.
 
 ## Users
 
@@ -116,6 +126,7 @@ Possible future web dashboard.
 - [ ] UNKNOWN
 - [ ] WARNED
 - [ ] COMPLIANT
+
 ## Statistics
 
 - [ ] Charts
@@ -123,9 +134,23 @@ Possible future web dashboard.
 - [ ] Browse failures
 - [ ] Historical activity
 - [ ] Upload activity timeline
+
+---
+
+# Discord Integration
+
+Optional Discord notifications for server operators.
+
+- [ ] Warning notifications
+- [ ] User became compliant notification
+- [ ] Daily statistics summary
+- [ ] Rich Discord embeds
+
 ---
 
 # Administration
+
+Administrative utilities.
 
 - [ ] Manual user recheck
 - [ ] Clear warning history
@@ -137,11 +162,10 @@ Possible future web dashboard.
 
 # slskd Integration
 
-Potential improvements:
+Future improvements based on new slskd features.
 
 - [ ] Cancel uploads immediately after a leecher is detected (if supported by the slskd API)
 - [ ] Automatic thank-you message when a warned user becomes compliant
-- [x] Automatic threshold synchronization from the slskd API
 - [ ] Support future slskd API changes
 
 ---
@@ -164,22 +188,29 @@ Potential improvements:
 
 ## Integrations
 
+- [ ] Discord
 - [ ] Grafana
 - [ ] Prometheus
 - [ ] Home Assistant
-- [ ] Discord
 
 ---
+
 # Future Vision
 
-The long-term goal is to make **slskd-message-bot** the companion application for slskd sharing policy management.
+The long-term goal of **slskd-message-bot** is to become the companion application for managing sharing policies on **slskd** servers.
 
 Future releases will focus on:
 
-- Encouraging healthy sharing
-- Providing meaningful analytics
-- Integrating with existing self-hosted tools
-- Remaining lightweight and easy to deploy
+- Encouraging healthy sharing habits.
+- Providing clear, friendly communication with users.
+- Reducing administrative overhead.
+- Measuring the effectiveness of sharing policies.
+- Providing meaningful statistics and insights.
+- Integrating with existing self-hosted tools.
+- Remaining lightweight, easy to configure, and Docker-first.
+- Maintaining compatibility with future versions of **slskd**.
+
+---
 
 # Guiding Principles
 
@@ -192,4 +223,10 @@ The goal is to encourage sharing by:
 - Recognizing users who become compliant.
 - Reducing confusion around transfer restrictions.
 
-The bot should remain lightweight, easy to configure, and fully compatible with current versions of **slskd**.
+The bot should remain:
+
+- Lightweight
+- Easy to configure
+- Docker-first
+- Reliable
+- Fully compatible with current and future versions of **slskd**
