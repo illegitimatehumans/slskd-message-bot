@@ -50,9 +50,11 @@ The bot automatically monitors active uploads, evaluates users against your shar
 
 ![Upload Evaluation](assets/assets-upload-evaluation.png)
 
-## Warning Message
+## Warning Detection
 
-Coming Soon!
+The bot automatically evaluates uploaders against your configured sharing policy. When a user does not meet the configured thresholds, a customizable private message is sent and the warning is recorded to prevent duplicate notifications.
+
+![Warning Detection](assets/warning-detection.png)
 
 Sends a friendly, customizable private message explaining your server's sharing policy.
 
