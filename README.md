@@ -246,17 +246,17 @@ app/
 ---
 ## AI Disclosure
 
-This project was developed by a human using AI-assisted programming tools.
+This project was developed by the project maintainer with assistance from AI coding tools.
 
-AI was used to help with:
+AI was used to help:
 
-- Brainstorming features and implementation ideas
-- Reviewing and refactoring code
-- Explaining APIs and debugging issues
-- Improving documentation and release notes
-- Writing and editing portions of the README and roadmap
+- Brainstorm implementation ideas
+- Review and refactor code
+- Debug issues
+- Improve documentation
+- Draft release notes
 
-All architecture, design decisions, testing, and final code review were performed by the project maintainer. Every code change was reviewed, modified as needed, and tested before being included in the project.
+All architecture, feature decisions, testing, and final code review were performed by the maintainer. Every change was reviewed and validated against a live `slskd` instance before being released.
 
 AI assistance was used as a development tool, not as a replacement for human judgment.
 
