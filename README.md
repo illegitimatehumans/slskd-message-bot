@@ -3,8 +3,10 @@
 ![Python](https://img.shields.io/badge/Python-3.13-blue)
 ![License](https://img.shields.io/github/license/illegitimatehumans/slskd-message-bot)
 ![Release](https://img.shields.io/github/v/release/illegitimatehumans/slskd-message-bot)
+Automatically synchronizes with your live **slskd** transfer group configuration—no duplicated settings to maintain.
 
-An automated sharing policy bot for slskd that monitors active uploads, intelligently evaluates users against configurable sharing thresholds, retries temporary browse failures, and sends a one-time customizable private message to users who don't meet your server's sharing policy.
+An automated sharing policy bot for slskd that monitors active uploads, automatically evaluates uploaders against the active slskd transfer group, retries temporary browse failures, and sends a one-time customizable private message to users who don't meet your server's sharing policy.
+
 Designed to complement **slskd** transfer groups by explaining *why* downloads may be limited instead of silently throttling users.
 
 ---
@@ -13,19 +15,18 @@ Designed to complement **slskd** transfer groups by explaining *why* downloads m
 
 - Automatic upload monitoring
 - Configurable grace period
-- Remote share browsing
-- Share threshold evaluation
-- One-time private messages
-- Configurable browse retry backoff
-- Customizable message templates
-- Dynamic placeholders
+- Automatic sharing policy evaluation
+- Dynamic synchronization with Slskd transfer groups
+- Intelligent browse retry backoff
+- One-time customizable private messages
+- Dynamic message placeholders
 - Whitelist support
 - SQLite database to prevent duplicate messages
-- Docker support
+- Docker and GitHub Container Registry support
 
 ---
 
-# Why?
+# Why This Exists
 slskd can already identify low-share users and place them into transfer groups with different upload limits.
 What it doesn't do is explain those restrictions.
 This bot automatically sends a one-time private message informing the user:
@@ -45,7 +46,7 @@ The bot automatically monitors active uploads, evaluates users against your shar
 
 ## Warning Detection
 
-The bot automatically evaluates uploaders against your configured sharing policy. When a user does not meet the configured thresholds, a customizable private message is sent and the warning is recorded to prevent duplicate notifications.
+The bot automatically evaluates uploaders against the active slskd transfer group. If a user doesn't meet the configured sharing requirements, a customizable private message is sent and recorded to prevent duplicate notifications.
 
 ![Warning Detection](assets/warning-detection.png)
 
@@ -55,6 +56,16 @@ When a user doesn't meet your configured sharing policy, the bot automatically s
 
 ![Warning message](assets/warning-message.png)
 ---
+
+# How It Works
+
+1. Monitor active uploads.
+2. Wait for the configured grace period.
+3. Browse the user's shared files.
+4. Compare their shares against the active slskd transfer group.
+5. Send a one-time customizable warning if they don't meet the configured requirements.
+6. Cache the result to avoid repeated browsing and duplicate messages.
+
 
 # Requirements
 - Docker
@@ -73,15 +84,14 @@ POST /api/v0/conversations/{username}
 ```
 GET /api/v0/options
 ```
-The bot automatically reads the configured leecher thresholds directly from slskd, ensuring warning messages always match the server configuration.
-If you're running an older version of slskd, check `/swagger` to verify the available endpoints.
+The bot automatically synchronizes its warning messages with the active slskd transfer group configuration, including sharing thresholds and transfer limits.
 ---
 
 # Installation
 Clone the repository:
 ```bash
-git clone https://github.com/illegitimatehumans/slskd-bot.git
-cd slskd-bot
+git clone https://github.com/illegitimatehumans/slskd-message-bot.git
+cd slskd-message-bot
 ```
 Copy the example environment:
 ```bash
@@ -93,6 +103,16 @@ Build and start:
 docker compose up -d --build
 ```
 ---
+
+## Docker Image
+
+Prebuilt images are published to GitHub Container Registry.
+
+```yaml
+services:
+  slskd-bot:
+    image: ghcr.io/illegitimatehumans/slskd-message-bot:latest
+```
 
 # First Run
 On first startup the bot automatically creates:
@@ -115,11 +135,8 @@ CHECK_INTERVAL=60
 GRACE_PERIOD=120
 GOOD_RECHECK_MINUTES=1440
 LEECHER_RECHECK_MINUTES=60
-
 # Browse retry delays (seconds)
 BROWSE_RETRY_DELAYS=2,5,10
-MIN_FILES=1000
-MIN_DIRECTORIES=20
 ```
 ### Notes
 The bot now reads the configured leecher thresholds directly from the running slskd server using:
@@ -173,12 +190,12 @@ Hello {username},
 
 Your current Soulseek shares appear to be below this server's minimum sharing requirements.
 
-Current shares
+Current shares:
 
 • {files} files
 • {directories} folders
 
-Minimum recommended
+Minimum recommended:
 
 • {min_files} shared files
 • {min_directories} shared folders
@@ -200,7 +217,6 @@ Sharing helps keep the Soulseek community healthy for everyone.
 
 Thanks for understanding and for helping keep Soulseek a sharing community!
 
-Thank you for contributing to the Soulseek community!
 ```
 
 ---
@@ -231,21 +247,31 @@ app/
 
 | Variable | Description |
 |-----------|-------------|
-| SLSKD_URL | URL of your slskd instance |
+| SLSKD_URL | slskd API URL |
 | SLSKD_API_KEY | slskd API key |
 | CHECK_INTERVAL | Seconds between upload scans |
 | GRACE_PERIOD | Seconds before evaluating a new uploader |
+| GOOD_RECHECK_MINUTES | Recheck interval for compliant users |
+| LEECHER_RECHECK_MINUTES | Recheck interval for users below sharing policy |
+| BROWSE_RETRY_DELAYS | Retry delays (comma separated) |
+| WHITELIST | Comma-separated usernames to ignore |
 
 ## Docker
 ### Production
+Uses the latest image published to GitHub Container Registry.
+No local build is required.
+
 ```bash
 docker compose pull
 docker compose up -d
 ```
-Uses the latest image published to GitHub Container Registry.
 ### Development
+
+Ideal for local development and testing.
+
 ```bash
 docker compose -f docker-compose.dev.yml up -d --build
+
 ```
 Builds the image locally for development.
 ---
