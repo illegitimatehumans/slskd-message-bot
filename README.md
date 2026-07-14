@@ -3,6 +3,7 @@
 ![Python](https://img.shields.io/badge/Python-3.13-blue)
 ![License](https://img.shields.io/github/license/illegitimatehumans/slskd-message-bot)
 ![Release](https://img.shields.io/github/v/release/illegitimatehumans/slskd-message-bot)
+
 Automatically synchronizes with your live **slskd** transfer group configuration—no duplicated settings to maintain.
 
 An automated sharing policy bot for slskd that monitors active uploads, automatically evaluates uploaders against the active slskd transfer group, retries temporary browse failures, and sends a one-time customizable private message to users who don't meet your server's sharing policy.
