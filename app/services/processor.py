@@ -29,12 +29,12 @@ def process(user):
 
 
     if username in runtime_warned:
-        log.info(f"{username}: Already warned this runtime")
+        log.info(f"{username}: User already processed (session)")
         return
 
     if already_warned(username):
         runtime_warned.add(username)
-        log.info(f"{username}: Already warned previously")
+        log.info(f"{username}: User already warned (database)")
         return
 
     cached = get_user(username)

@@ -2,20 +2,20 @@ services:
   slskd-bot:
     build: .
     container_name: slskd-bot
-
+    user: "${PUID}:${PGID}"
+    environment:
+      - TZ=${TZ}
+      - SLSKD_URL=${SLSKD_URL}
+      - SLSKD_API_KEY=${SLSKD_API_KEY}
     restart: unless-stopped
-
     env_file:
       - .env
-
     volumes:
       - ./data:/app/data
       - ./logs:/app/logs
       - ./message.txt.example:/app/message.txt.example:ro
-
     networks:
       - media-stack
-
 networks:
   media-stack:
     external: true
