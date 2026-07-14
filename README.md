@@ -183,6 +183,23 @@ Minimum recommended
 • {min_files} shared files
 • {min_directories} shared folders
 
+Until these requirements are met, your downloads are placed in a limited transfer group.
+
+Current limits:
+
+- {upload_slots} upload slot(s)
+- {speed_limit} KB/s maximum transfer speed
+- {queue_files} queued download(s)
+- Queue size: {queue_size} MB
+- Daily: {daily_files} files or {daily_size} MB
+- Weekly: {weekly_files} files or {weekly_size} MB
+
+Once you meet the sharing requirements, these restrictions are removed automatically.
+
+Sharing helps keep the Soulseek community healthy for everyone.
+
+Thanks for understanding and for helping keep Soulseek a sharing community!
+
 Thank you for contributing to the Soulseek community!
 ```
 
