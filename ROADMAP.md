@@ -1,29 +1,48 @@
 # slskd-message-bot Roadmap
 
-This roadmap outlines planned improvements and the long-term direction of **slskd-message-bot**.
+This roadmap outlines the planned direction of **slskd-message-bot**.
 
-The project follows **Semantic Versioning (SemVer)**, but priorities may change based on community feedback and future changes to the **slskd** API.
+The project follows **Semantic Versioning (SemVer)**. Priorities may evolve based on community feedback and future changes to the **slskd** API.
 
 ---
 
 # v1.3.x — Uploader Evaluation
 **Status:** ✅ Complete
 
-The focus of the v1.3.x series was making uploader evaluation faster, smarter, and more reliable.
+Focused on making uploader evaluation faster, smarter, and more reliable.
 
 ## Completed
 
-- [x] Evaluate first-time uploaders immediately
-- [x] Retry failed browse requests automatically
+- [x] Immediate evaluation of new uploaders
+- [x] Automatic browse retries
 - [x] Configurable browse retry backoff
 - [x] Smart browse caching
-- [x] Reduce unnecessary browse requests
-- [x] Dynamic threshold synchronization from the slskd API
+- [x] Reduced unnecessary browse requests
 - [x] Improved browse logging
 
 ---
 
-# v1.4.0 — Statistics & Compliance Tracking
+# v1.4.x — Dynamic slskd Integration
+**Status:** ✅ Complete
+
+Focused on eliminating duplicated configuration by reading the active server configuration directly from slskd.
+
+## Completed
+
+- [x] Live leecher threshold synchronization
+- [x] Dynamic transfer group synchronization
+- [x] Automatic transfer limit placeholders
+- [x] Dynamic message generation
+- [x] Runtime message template creation
+- [x] Improved warning logging
+- [x] Local timezone support
+- [x] Run container as a configurable non-root user (`PUID` / `PGID`)
+- [x] Docker hardening
+- [x] GitHub Container Registry releases
+
+---
+
+# v1.5.0 — Statistics & Compliance Tracking
 
 The next major milestone focuses on measuring how effective your sharing policy actually is.
 
@@ -32,16 +51,20 @@ The next major milestone focuses on measuring how effective your sharing policy 
 - [ ] Users evaluated
 - [ ] GOOD users
 - [ ] LEECHERS detected
+- [ ] UNKNOWN evaluations
 - [ ] Browse failures
-- [ ] Warnings sent
 - [ ] Browse success rate
-- [ ] Average browse time
+- [ ] Average browse duration
+- [ ] Total warnings sent
+- [ ] Duplicate warnings skipped
+- [ ] Session cache hits
+- [ ] Database cache hits
 
 ## Compliance Tracking
 
 One of the primary goals of the bot is encouraging users to share.
 
-Future releases will measure whether users improve after receiving a warning.
+Future releases will measure whether users become compliant after receiving a warning.
 
 Example:
 
@@ -78,8 +101,8 @@ Future configuration improvements.
 
 - [ ] Move whitelist to `data/whitelist.txt`
 - [ ] Configurable blacklist file
-- [ ] Additional runtime configuration options
 - [ ] Runtime configuration validation
+- [ ] Live configuration reload
 
 ---
 
@@ -87,10 +110,10 @@ Future configuration improvements.
 
 Improve diagnostics and troubleshooting.
 
-- [ ] Better warning summaries
 - [ ] Debug logging mode
 - [ ] Log rotation support
 - [ ] Performance timing logs
+- [ ] Statistics summary output
 
 ---
 
@@ -103,37 +126,22 @@ Improve diagnostics and troubleshooting.
 - [x] `{directories}`
 - [x] `{min_files}`
 - [x] `{min_directories}`
+- [x] `{upload_slots}`
+- [x] `{speed_limit}`
+- [x] `{queue_files}`
+- [x] `{queue_size}`
+- [x] `{daily_files}`
+- [x] `{daily_size}`
+- [x] `{daily_failures}`
+- [x] `{weekly_files}`
+- [x] `{weekly_size}`
+- [x] `{weekly_failures}`
 
 ## Planned Placeholders
 
-- [ ] `{speed_limit}`
-- [ ] `{daily_limit}`
-- [ ] `{weekly_limit}`
 - [ ] `{server_name}`
 - [ ] `{warning_count}`
 - [ ] `{date}`
-
----
-
-# Web Dashboard
-
-An optional dashboard for monitoring server activity.
-
-## Users
-
-- [ ] GOOD
-- [ ] LEECHER
-- [ ] UNKNOWN
-- [ ] WARNED
-- [ ] COMPLIANT
-
-## Statistics
-
-- [ ] Charts
-- [ ] Compliance graphs
-- [ ] Browse failures
-- [ ] Historical activity
-- [ ] Upload activity timeline
 
 ---
 
@@ -164,20 +172,21 @@ Administrative utilities.
 
 Future improvements based on new slskd features.
 
-- [ ] Cancel uploads immediately after a leecher is detected (if supported by the slskd API)
+- [ ] Cancel uploads immediately after a leecher is detected (if supported by the API)
 - [ ] Automatic thank-you message when a warned user becomes compliant
 - [ ] Support future slskd API changes
 
 ---
 
-# Long-Term Goals
+# v2.x — Optional Dashboard
 
-## Web UI
+## Dashboard
 
-- [ ] Dashboard
-- [ ] User browser
-- [ ] Configuration editor
 - [ ] Live activity monitor
+- [ ] User browser
+- [ ] Compliance dashboard
+- [ ] Historical statistics
+- [ ] Configuration editor
 
 ## REST API
 
@@ -199,15 +208,21 @@ Future improvements based on new slskd features.
 
 The long-term goal of **slskd-message-bot** is to become the companion application for managing sharing policies on **slskd** servers.
 
-Future releases will focus on:
+The project is built around one core principle:
+
+> **Avoid duplicated configuration whenever possible.**
+
+Whenever practical, the bot should automatically read configuration directly from **slskd** rather than requiring administrators to maintain the same settings in multiple places.
+
+Future releases will continue focusing on:
 
 - Encouraging healthy sharing habits.
-- Providing clear, friendly communication with users.
+- Providing friendly communication with users.
 - Reducing administrative overhead.
-- Measuring the effectiveness of sharing policies.
-- Providing meaningful statistics and insights.
-- Integrating with existing self-hosted tools.
-- Remaining lightweight, easy to configure, and Docker-first.
+- Measuring policy effectiveness.
+- Providing meaningful statistics.
+- Remaining lightweight.
+- Remaining Docker-first.
 - Maintaining compatibility with future versions of **slskd**.
 
 ---
@@ -220,13 +235,14 @@ The goal is to encourage sharing by:
 
 - Explaining server policies.
 - Providing clear guidance.
-- Recognizing users who become compliant.
+- Encouraging users to become compliant.
 - Reducing confusion around transfer restrictions.
 
-The bot should remain:
+The project should remain:
 
 - Lightweight
-- Easy to configure
 - Docker-first
+- Easy to configure
+- Secure by default
 - Reliable
-- Fully compatible with current and future versions of **slskd**
+- Compatible with current and future versions of **slskd**
