@@ -132,10 +132,20 @@ Example:
 ```env
 SLSKD_URL=http://slskd:5030
 SLSKD_API_KEY=YOUR_API_KEY
+
+# Container user/group
+PUID=1000
+PGID=1000
+
+# Timezone
+TZ=America/New_York
+
+# Check interval (seconds)
 CHECK_INTERVAL=60
 GRACE_PERIOD=120
 GOOD_RECHECK_MINUTES=1440
 LEECHER_RECHECK_MINUTES=60
+
 # Browse retry delays (seconds)
 BROWSE_RETRY_DELAYS=2,5,10
 ```
