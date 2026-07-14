@@ -12,7 +12,13 @@ def evaluate(username):
     """
     Determine whether a user meets the configured sharing policy.
     """
-    min_files, min_directories = api.get_leecher_thresholds()
+    group = api.get_leecher_group()
+
+    thresholds = group["thresholds"]
+
+    min_files = thresholds["files"]
+
+    min_directories = thresholds["directories"]
 
     browse = None
 

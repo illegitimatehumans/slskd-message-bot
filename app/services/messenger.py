@@ -34,16 +34,44 @@ def load_message():
 
 def send_warning(username, files, directories):
 
-    min_files, min_directories = api.get_leecher_thresholds()
+    group = api.get_leecher_group()
 
-    message = (
-        load_message()
-        .replace("{username}", username)
-        .replace("{files}", str(files))
-        .replace("{directories}", str(directories))
-        .replace("{min_files}", str(min_files))
-        .replace("{min_directories}", str(min_directories))
-    )
+    thresholds = group["thresholds"]
+
+    upload = group["upload"]
+
+    queued = upload["limits"]["queued"]
+
+    daily = upload["limits"]["daily"]
+
+    weekly = upload["limits"]["weekly"]
+
+    placeholders = {
+        "username": username,
+        "files": files,
+        "directories": directories,
+        "min_files": thresholds["files"],
+        "min_directories": thresholds["directories"],
+        "upload_slots": upload["slots"],
+        "speed_limit": upload["speedLimit"],
+        "queue_files": queued["files"],
+        "queue_size": queued["megabytes"],
+        "daily_files": daily["files"],
+        "daily_size": daily["megabytes"],
+        "daily_failures": daily["failures"],
+        "weekly_files": weekly["files"],
+        "weekly_size": weekly["megabytes"],
+        "weekly_failures": weekly["failures"],
+    }
+
+    message = load_message()
+
+    for key, value in placeholders.items():
+
+        message = message.replace(
+            f"{{{key}}}",
+            str(value)
+        )
 
     log.info(f"Sending warning to {username}")
 

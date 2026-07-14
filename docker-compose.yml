@@ -2,20 +2,15 @@ services:
   slskd-bot:
     image: ghcr.io/illegitimatehumans/slskd-message-bot:latest
     container_name: slskd-bot
-
     restart: unless-stopped
-
     env_file:
       - .env
-
     volumes:
       - ./data:/app/data
       - ./logs:/app/logs
       - ./message.txt.example:/app/message.txt.example:ro
-
     networks:
       - media-stack
-
 networks:
   media-stack:
     external: true

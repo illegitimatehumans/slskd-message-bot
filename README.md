@@ -36,13 +36,24 @@ The result is a better user experience and fewer confused users asking why their
 ---
 
 # Screenshots
+
 ## Upload Evaluation
+
 The bot automatically monitors active uploads, evaluates users against your sharing policy, and logs the results.
+
 ![Upload Evaluation](assets/assets-upload-evaluation.png)
+
 ## Warning Detection
+
 The bot automatically evaluates uploaders against your configured sharing policy. When a user does not meet the configured thresholds, a customizable private message is sent and the warning is recorded to prevent duplicate notifications.
+
 ![Warning Detection](assets/warning-detection.png)
-Sends a friendly, customizable private message explaining your server's sharing policy.
+
+## Example Warning Message
+
+When a user doesn't meet your configured sharing policy, the bot automatically sends a customizable private message.
+
+![Warning message](assets/warning-message.png)
 ---
 
 # Requirements
@@ -143,6 +154,17 @@ The warning template supports the following placeholders:
 - `{directories}`
 - `{min_files}`
 - `{min_directories}`
+- `{upload_slots}`
+- `{speed_limit}`
+- `{queue_files}`
+- `{queue_size}`
+- `{daily_files}`
+- `{daily_size}`
+- `{daily_failures}`
+- `{weekly_files}`
+- `{weekly_size}`
+- `{weekly_failures}`
+
 
 Example:
 

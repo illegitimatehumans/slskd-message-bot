@@ -6,6 +6,26 @@ The format is based on Keep a Changelog and this project adheres to Semantic Ver
 
 
 ---
+## v1.4.2
+
+### Added
+- Automatic synchronization of transfer group limits from slskd.
+- New message placeholders:
+  - `{upload_slots}`
+  - `{speed_limit}`
+  - `{queue_files}`
+  - `{queue_size}`
+  - `{daily_files}`
+  - `{daily_size}`
+  - `{daily_failures}`
+  - `{weekly_files}`
+  - `{weekly_size}`
+  - `{weekly_failures}`
+
+### Changed
+- Warning messages now reflect the active slskd transfer group instead of requiring manually maintained values.
+
+
 ## [1.4.1] - 2026-07-13
 
 ### Added

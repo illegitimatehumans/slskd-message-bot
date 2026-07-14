@@ -160,16 +160,11 @@ class SlskdAPI:
 
             return False
 
-    def get_leecher_thresholds(self):
+    def get_leecher_group(self):
 
-            options = self.get("/api/v0/options")
+        options = self.get("/api/v0/options")
 
-            thresholds = (
-                options["transfers"]["groups"]["leechers"]["thresholds"]
-            )
+        return options["transfers"]["groups"]["leechers"]
 
-            return (
-                thresholds["files"],
-                thresholds["directories"],
-            )
 api = SlskdAPI()
+
