@@ -1,8 +1,8 @@
 # slskd-message-bot
 ![Docker](https://img.shields.io/badge/Container-GHCR-blue)
 ![Python](https://img.shields.io/badge/Python-3.13-blue)
-[![License](https://img.shields.io/github/license/illegitimatehumans/slskd-message-bot)](https://github.com/illegitimatehumans/slskd-message-bot/blob/main/LICENSE)
-[![Release](https://img.shields.io/github/v/release/illegitimatehumans/slskd-message-bot)](https://github.com/illegitimatehumans/slskd-message-bot/releases)
+[![License](https://img.shields.io/badge/License-MIT-blue)](https://github.com/illegitimatehumans/slskd-message-bot/blob/main/LICENSE)
+[![Release](https://img.shields.io/badge/Release-v1.4.3-blue)](https://github.com/illegitimatehumans/slskd-message-bot/releases/tag/v1.4.3)
 
 Automatically synchronizes with your live **slskd** transfer group configuration—no duplicated settings to maintain.
 
