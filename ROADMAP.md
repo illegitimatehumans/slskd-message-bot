@@ -22,7 +22,7 @@ Focused on making uploader evaluation faster, smarter, and more reliable.
 
 ---
 
-# v1.4.x — Dynamic slskd Integration
+# v1.4.3 — Dynamic slskd Integration
 **Status:** ✅ Complete
 
 Focused on eliminating duplicated configuration by reading the active server configuration directly from slskd.
