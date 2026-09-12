@@ -197,37 +197,7 @@ The warning template supports the following placeholders:
 Example:
 
 ```text
-Hello {username},
-
-Your current Soulseek shares appear to be below this server's minimum sharing requirements.
-
-Current shares:
-
-• {files} files
-• {directories} folders
-
-Minimum recommended:
-
-• {min_files} shared files
-• {min_directories} shared folders
-
-Until these requirements are met, your downloads are placed in a limited transfer group.
-
-Current limits:
-
-- {upload_slots} upload slot(s)
-- {speed_limit} KB/s maximum transfer speed
-- {queue_files} queued download(s)
-- Queue size: {queue_size} MB
-- Daily: {daily_files} files or {daily_size} MB
-- Weekly: {weekly_files} files or {weekly_size} MB
-
-Once you meet the sharing requirements, these restrictions are removed automatically.
-
-Sharing helps keep the Soulseek community healthy for everyone.
-
-Thanks for understanding and for helping keep Soulseek a sharing community!
-
+Hello {username}. Your files: {files}. Your folders: {directories}. Minimum sharing requirements: {min_files} files and {min_directories} folders. Your uploads may be limited to {upload_slots} upload slot(s) and {speed_limit} KB/s maximum transfer speed. Queue limits: {queue_files} queued download(s), queue size: {queue_size} MB, daily: {daily_files} files or {daily_size} MB, weekly: {weekly_files} files or {weekly_size} MB. Sharing is caring. Thanks for contributing!
 ```
 
 ---
