@@ -194,7 +194,7 @@ The warning template supports the following placeholders:
 - `{weekly_failures}`
 
 
-Example:
+Example: (KEEP message txt in one-single line)
 
 ```text
 Hello {username}. Your files: {files}. Your folders: {directories}. Minimum sharing requirements: {min_files} files and {min_directories} folders. Your uploads may be limited to {upload_slots} upload slot(s) and {speed_limit} KB/s maximum transfer speed. Queue limits: {queue_files} queued download(s), queue size: {queue_size} MB, daily: {daily_files} files or {daily_size} MB, weekly: {weekly_files} files or {weekly_size} MB. Sharing is caring. Thanks for contributing!
