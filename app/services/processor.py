@@ -6,6 +6,7 @@ from app.database.database import (
     already_warned,
     mark_warned,
     needs_recheck,
+    record_stat,
 )
 from app.services.evaluator import evaluate
 from app.services.messenger import send_warning
@@ -20,24 +21,38 @@ WHITELIST = {
 def process(user):
 
     username = user["username"]
-
     log.info(f"Processing {username}")
 
     if username in WHITELIST:
         log.info(f"{username}: Whitelisted")
         return
 
-
     if username in runtime_warned:
-        log.info(f"{username}: User already processed (session)")
+        record_stat(
+            event="session_cache_hit",
+            username=username,
+        )
+
+        log.info(
+            f"{username}: User already processed (session)"
+        )
         return
 
     if already_warned(username):
         runtime_warned.add(username)
-        log.info(f"{username}: User already warned (database)")
+
+        record_stat(
+            event="database_cache_hit",
+            username=username,
+        )
+
+        log.info(
+            f"{username}: User already warned (database)"
+        )
         return
 
     cached = get_user(username)
+
     if (
         cached
         and user["seconds"] < GRACE_PERIOD
@@ -47,19 +62,29 @@ def process(user):
             f"({user['seconds']} / {GRACE_PERIOD}s)"
         )
         return
+
     if (
         cached
         and cached["status"] in ("GOOD", "LEECHER")
         and not needs_recheck(username)
     ):
-        log.info(f"{username}: Cached GOOD - skipping browse"
+        record_stat(
+            event="database_cache_hit",
+            username=username,
+            status=cached["status"],
+            files=cached["files"],
+            directories=cached["directories"],
+        )
 
+        log.info(
+            f"{username}: Cached {cached['status']} - skipping browse"
         )
 
         if cached["status"] == "LEECHER":
             log.info(
                 f"{username}: Previously evaluated as a leecher"
             )
+
         return
 
     log.info(f"{username}: Evaluating")
@@ -75,19 +100,15 @@ def process(user):
     )
 
     if result["status"] == "UNKNOWN":
-
         log.warning(f"{username}: Browse failed")
-
         return
 
     if result["status"] == "GOOD":
-
         log.info(
             f"{username}: GOOD "
             f"({result['files']} files / "
             f"{result['directories']} dirs)"
         )
-
         return
 
     log.warning(
@@ -101,9 +122,15 @@ def process(user):
         result["files"],
         result["directories"]
     ):
+        record_stat(
+            event="warning_sent",
+            username=username,
+            status=result["status"],
+            files=result["files"],
+            directories=result["directories"],
+        )
 
         runtime_warned.add(username)
-
         mark_warned(username)
 
         log.warning("")

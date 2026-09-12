@@ -11,6 +11,7 @@ services:
     env_file:
       - .env
     volumes:
+      - ./app:/app/app
       - ./data:/app/data
       - ./logs:/app/logs
       - ./message.txt.example:/app/message.txt.example:ro

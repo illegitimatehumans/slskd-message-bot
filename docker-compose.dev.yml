@@ -1,6 +1,7 @@
 services:
   slskd-bot:
     build: .
+    image: ghcr.io/illegitimatehumans/slskd-message-bot:latest
     container_name: slskd-bot
     user: "${PUID}:${PGID}"
     environment:

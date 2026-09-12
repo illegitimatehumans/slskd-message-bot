@@ -9,6 +9,7 @@ from app.config import (
 
 conn = sqlite3.connect(DATABASE, check_same_thread=False)
 
+# Current user state / cache
 conn.execute("""
 CREATE TABLE IF NOT EXISTS users (
     username TEXT PRIMARY KEY,
@@ -20,11 +21,24 @@ CREATE TABLE IF NOT EXISTS users (
 )
 """)
 
+# Historical statistics/events
+conn.execute("""
+CREATE TABLE IF NOT EXISTS statistics (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT,
+    event TEXT NOT NULL,
+    status TEXT,
+    files INTEGER,
+    directories INTEGER,
+    duration_ms INTEGER,
+    created_at TEXT NOT NULL
+)
+""")
+
 conn.commit()
 
 
 def get_user(username):
-
     cur = conn.execute(
         """
         SELECT
@@ -62,7 +76,6 @@ def save_user(
     directories,
     warned=False
 ):
-
     conn.execute(
         """
         INSERT OR REPLACE INTO users
@@ -98,7 +111,6 @@ def save_user(
 
 
 def already_warned(username):
-
     user = get_user(username)
 
     if user is None:
@@ -108,7 +120,6 @@ def already_warned(username):
 
 
 def mark_warned(username):
-
     conn.execute(
         """
         UPDATE users
@@ -125,8 +136,8 @@ def mark_warned(username):
 
     conn.commit()
 
-def needs_recheck(username):
 
+def needs_recheck(username):
     user = get_user(username)
 
     if user is None:
@@ -146,3 +157,160 @@ def needs_recheck(username):
         datetime.utcnow() - checked
         > timedelta(minutes=interval)
     )
+
+
+def record_stat(
+    event,
+    username=None,
+    status=None,
+    files=None,
+    directories=None,
+    duration_ms=None,
+):
+    """
+    Record a historical statistics event.
+    """
+
+    conn.execute(
+        """
+        INSERT INTO statistics
+        (
+            username,
+            event,
+            status,
+            files,
+            directories,
+            duration_ms,
+            created_at
+        )
+        VALUES
+        (
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?
+        )
+        """,
+        (
+            username,
+            event,
+            status,
+            files,
+            directories,
+            duration_ms,
+            datetime.utcnow().isoformat(),
+        ),
+    )
+
+    conn.commit()
+
+def get_statistics_summary():
+    """
+    Return aggregate statistics from historical events.
+    """
+
+    summary = {}
+
+    cur = conn.execute(
+        """
+        SELECT COUNT(*)
+        FROM statistics
+        WHERE event='evaluation'
+        """
+    )
+    summary["users_evaluated"] = cur.fetchone()[0]
+
+    cur = conn.execute(
+        """
+        SELECT COUNT(*)
+        FROM statistics
+        WHERE event='evaluation'
+        AND status='GOOD'
+        """
+    )
+    summary["good_users"] = cur.fetchone()[0]
+
+    cur = conn.execute(
+        """
+        SELECT COUNT(*)
+        FROM statistics
+        WHERE event='evaluation'
+        AND status='LEECHER'
+        """
+    )
+    summary["leechers"] = cur.fetchone()[0]
+
+    cur = conn.execute(
+        """
+        SELECT COUNT(*)
+        FROM statistics
+        WHERE event='evaluation'
+        AND status='UNKNOWN'
+        """
+    )
+    summary["unknown_evaluations"] = cur.fetchone()[0]
+
+    cur = conn.execute(
+        """
+        SELECT COUNT(*)
+        FROM statistics
+        WHERE event='browse_success'
+        """
+    )
+    summary["browse_successes"] = cur.fetchone()[0]
+
+    cur = conn.execute(
+        """
+        SELECT COUNT(*)
+        FROM statistics
+        WHERE event='browse_failure'
+        """
+    )
+    summary["browse_failures"] = cur.fetchone()[0]
+
+    cur = conn.execute(
+        """
+        SELECT AVG(duration_ms)
+        FROM statistics
+        WHERE event='evaluation'
+        AND duration_ms IS NOT NULL
+        """
+    )
+    average_duration = cur.fetchone()[0]
+    summary["average_browse_duration_ms"] = (
+        round(average_duration, 2)
+        if average_duration is not None
+        else 0
+    )
+
+    cur = conn.execute(
+        """
+        SELECT COUNT(*)
+        FROM statistics
+        WHERE event='warning_sent'
+        """
+    )
+    summary["warnings_sent"] = cur.fetchone()[0]
+
+    cur = conn.execute(
+        """
+        SELECT COUNT(*)
+        FROM statistics
+        WHERE event='session_cache_hit'
+        """
+    )
+    summary["session_cache_hits"] = cur.fetchone()[0]
+
+    cur = conn.execute(
+        """
+        SELECT COUNT(*)
+        FROM statistics
+        WHERE event='database_cache_hit'
+        """
+    )
+    summary["database_cache_hits"] = cur.fetchone()[0]
+
+    return summary

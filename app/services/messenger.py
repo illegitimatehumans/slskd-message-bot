@@ -58,10 +58,10 @@ def send_warning(username, files, directories):
         "queue_size": queued["megabytes"],
         "daily_files": daily["files"],
         "daily_size": daily["megabytes"],
-        "daily_failures": daily["failures"],
+        "daily_failures": daily.get("failures"),
         "weekly_files": weekly["files"],
         "weekly_size": weekly["megabytes"],
-        "weekly_failures": weekly["failures"],
+        "weekly_failures": weekly.get("failures"),
     }
 
     message = load_message()
