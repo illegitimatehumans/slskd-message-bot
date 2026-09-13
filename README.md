@@ -389,7 +389,7 @@ Need help, want to report a bug, or have an idea for the project?
 
 Join the Discord community:
 
-[![Discord](https://img.shields.io/badge/Discord-Join%20Server-5865F2?logo=discord&logoColor=white)](https://discord.gg/VSztdkRYD)
+[![Discord](https://img.shields.io/badge/Discord-Join%20Server-5865F2?logo=discord&logoColor=white)](https://discord.gg/2WeBqUPEjJ)
 
 ## License
 
