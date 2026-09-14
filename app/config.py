@@ -24,8 +24,11 @@ DATABASE = "/app/data/warned.sqlite"
 LOG_FILE = "/app/logs/slskd-bot.log"
 
 GOOD_RECHECK_MINUTES = int(
-    os.getenv("GOOD_RECHECK_MINUTES", 60)
+    os.getenv("GOOD_RECHECK_MINUTES", 1440)
 )
 LEECHER_RECHECK_MINUTES = int(
     os.getenv("LEECHER_RECHECK_MINUTES", 60)
+)
+UNKNOWN_RECHECK_MINUTES = int(
+    os.getenv("UNKNOWN_RECHECK_MINUTES", 10)
 )

@@ -5,6 +5,7 @@ from app.config import (
     DATABASE,
     GOOD_RECHECK_MINUTES,
     LEECHER_RECHECK_MINUTES,
+    UNKNOWN_RECHECK_MINUTES,
 )
 
 conn = sqlite3.connect(DATABASE, check_same_thread=False)
@@ -150,6 +151,8 @@ def needs_recheck(username):
 
     if user["status"] == "LEECHER":
         interval = LEECHER_RECHECK_MINUTES
+    elif user["status"] == "UNKNOWN":
+        interval = UNKNOWN_RECHECK_MINUTES
     else:
         interval = GOOD_RECHECK_MINUTES
 
