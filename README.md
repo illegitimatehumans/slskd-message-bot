@@ -19,6 +19,7 @@ The bot reads sharing thresholds and transfer limits directly from the running s
 - Automatically synchronizes with slskd transfer group settings
 - Retries temporary browse failures
 - Configurable browse retry delays
+- Temporarily skips users whose shares cannot be browsed
 - Caches evaluations to reduce unnecessary browse requests
 - Prevents duplicate warning messages
 - Customizable warning messages
@@ -30,6 +31,7 @@ The bot reads sharing thresholds and transfer limits directly from the running s
 - Prebuilt images available through GitHub Container Registry
 - Runs as a configurable non-root user
 - Timezone support
+- Displays a startup banner with project information
 
 ## How It Works
 
@@ -156,9 +158,10 @@ The following environment variables are available:
 | `TZ` | Container timezone | — |
 | `CHECK_INTERVAL` | Seconds between upload scans | `60` |
 | `GRACE_PERIOD` | Seconds before evaluating a new uploader | `120` |
-| `GOOD_RECHECK_MINUTES` | Recheck interval for compliant users | `60` |
+| `GOOD_RECHECK_MINUTES` | Recheck interval for compliant users | `1440` |
 | `LEECHER_RECHECK_MINUTES` | Recheck interval for users below the sharing requirements | `60` |
 | `BROWSE_RETRY_DELAYS` | Retry delays in seconds | `2,5,10` |
+| `UNKNOWN_RECHECK_MINUTES` | Recheck interval for users whose browse evaluation failed | `10` |
 
 Example:
 
@@ -176,6 +179,7 @@ GRACE_PERIOD=120
 
 GOOD_RECHECK_MINUTES=1440
 LEECHER_RECHECK_MINUTES=60
+UNKNOWN_RECHECK_MINUTES=10
 
 BROWSE_RETRY_DELAYS=2,5,10
 ```
@@ -300,6 +304,7 @@ Recheck intervals can be configured independently:
 ```env
 GOOD_RECHECK_MINUTES=1440
 LEECHER_RECHECK_MINUTES=60
+UNKNOWN_RECHECK_MINUTES=10
 ```
 
 ## Statistics
