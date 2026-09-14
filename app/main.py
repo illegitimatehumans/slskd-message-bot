@@ -6,8 +6,19 @@ from app.services.processor import process
 from app.services.messenger import ensure_message
 
 print()
-print("=" * 70)
-print("slskd-Message-Bot")
+print("  ███████╗██╗     ███████╗██╗  ██╗██████╗")
+print("  ██╔════╝██║     ██╔════╝██║ ██╔╝██╔══██╗")
+print("  ███████╗██║     ███████╗█████╔╝ ██║  ██║")
+print("  ╚════██║██║     ╚════██║██╔═██╗ ██║  ██║")
+print("  ███████║███████╗███████║██║  ██╗██████╔╝")
+print("  ╚══════╝╚══════╝╚══════╝╚═╝  ╚═╝╚═════╝")
+print()
+print("  slskd-Message-Bot")
+print("  Automated sharing policy enforcement for slskd")
+print()
+print("  GitHub: https://github.com/illegitimatehumans/slskd-message-bot")
+print("  License: MIT")
+print()
 print("=" * 70)
 
 ensure_message()
