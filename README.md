@@ -118,21 +118,34 @@ The message file can be edited at any time without rebuilding the container.
 
 ## Docker
 
-### Prebuilt Image
+### Docker Compose Configuration
 
-Prebuilt images are published to GitHub Container Registry.
+Example `docker-compose.yml`:
 
 ```yaml
 services:
   slskd-bot:
     image: ghcr.io/illegitimatehumans/slskd-message-bot:latest
-```
+    container_name: slskd-bot
+    user: "${PUID}:${PGID}"
+    environment:
+      - TZ=${TZ}
+      - SLSKD_URL=${SLSKD_URL}
+      - SLSKD_API_KEY=${SLSKD_API_KEY}
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./app:/app/app
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./message.txt.example:/app/message.txt.example:ro
+    networks:
+      - media-stack
 
-Pull the latest image:
-
-```bash
-docker compose pull
-docker compose up -d
+networks:
+  media-stack:
+    external: true
 ```
 
 ### Development
