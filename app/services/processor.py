@@ -65,7 +65,7 @@ def process(user):
 
     if (
         cached
-        and cached["status"] in ("GOOD", "LEECHER")
+        and cached["status"] in ("GOOD", "LEECHER", "UNKNOWN")
         and not needs_recheck(username)
     ):
         record_stat(
