@@ -128,6 +128,8 @@ services:
     image: ghcr.io/illegitimatehumans/slskd-message-bot:latest
     container_name: slskd-bot
     user: "${PUID}:${PGID}"
+    cap_drop:
+      - ALL
     environment:
       - TZ=${TZ}
       - SLSKD_URL=${SLSKD_URL}
