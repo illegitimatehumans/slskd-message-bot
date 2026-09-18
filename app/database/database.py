@@ -6,6 +6,7 @@ from app.config import (
     GOOD_RECHECK_MINUTES,
     LEECHER_RECHECK_MINUTES,
     UNKNOWN_RECHECK_MINUTES,
+    UNKNOWN_RECHECK_BACKOFF_MINUTES,
 )
 
 conn = sqlite3.connect(DATABASE, check_same_thread=False)
@@ -18,9 +19,22 @@ CREATE TABLE IF NOT EXISTS users (
     files INTEGER,
     directories INTEGER,
     warned INTEGER DEFAULT 0,
-    last_checked TEXT
+    last_checked TEXT,
+    browse_failures INTEGER DEFAULT 0
 )
 """)
+
+# Migrate existing databases
+columns = {
+    row[1]
+    for row in conn.execute("PRAGMA table_info(users)").fetchall()
+}
+
+if "browse_failures" not in columns:
+    conn.execute("""
+        ALTER TABLE users
+        ADD COLUMN browse_failures INTEGER DEFAULT 0
+    """)
 
 # Historical statistics/events
 conn.execute("""
@@ -48,7 +62,8 @@ def get_user(username):
             files,
             directories,
             warned,
-            last_checked
+            last_checked,
+            browse_failures
         FROM users
         WHERE username=?
         """,
@@ -66,7 +81,8 @@ def get_user(username):
         "files": row[2],
         "directories": row[3],
         "warned": bool(row[4]),
-        "last_checked": row[5]
+        "last_checked": row[5],
+        "browse_failures": row[6] or 0,
     }
 
 
@@ -77,6 +93,16 @@ def save_user(
     directories,
     warned=False
 ):
+    existing = get_user(username)
+
+    if status == "UNKNOWN":
+        if existing and existing["status"] == "UNKNOWN":
+            browse_failures = existing["browse_failures"] + 1
+        else:
+            browse_failures = 1
+    else:
+        browse_failures = 0
+
     conn.execute(
         """
         INSERT OR REPLACE INTO users
@@ -86,10 +112,12 @@ def save_user(
             files,
             directories,
             warned,
-            last_checked
+            last_checked,
+            browse_failures
         )
         VALUES
         (
+            ?,
             ?,
             ?,
             ?,
@@ -104,7 +132,8 @@ def save_user(
             files,
             directories,
             int(warned),
-            datetime.utcnow().isoformat()
+            datetime.utcnow().isoformat(),
+            browse_failures,
         )
     )
 
@@ -138,6 +167,18 @@ def mark_warned(username):
     conn.commit()
 
 
+def get_unknown_recheck_minutes(failures):
+    if failures <= 0:
+        return UNKNOWN_RECHECK_MINUTES
+
+    index = failures - 1
+
+    if index >= len(UNKNOWN_RECHECK_BACKOFF_MINUTES):
+        index = len(UNKNOWN_RECHECK_BACKOFF_MINUTES) - 1
+
+    return UNKNOWN_RECHECK_BACKOFF_MINUTES[index]
+
+
 def needs_recheck(username):
     user = get_user(username)
 
@@ -151,8 +192,12 @@ def needs_recheck(username):
 
     if user["status"] == "LEECHER":
         interval = LEECHER_RECHECK_MINUTES
+
     elif user["status"] == "UNKNOWN":
-        interval = UNKNOWN_RECHECK_MINUTES
+        interval = get_unknown_recheck_minutes(
+            user["browse_failures"]
+        )
+
     else:
         interval = GOOD_RECHECK_MINUTES
 
@@ -170,10 +215,6 @@ def record_stat(
     directories=None,
     duration_ms=None,
 ):
-    """
-    Record a historical statistics event.
-    """
-
     conn.execute(
         """
         INSERT INTO statistics
@@ -210,11 +251,8 @@ def record_stat(
 
     conn.commit()
 
-def get_statistics_summary():
-    """
-    Return aggregate statistics from historical events.
-    """
 
+def get_statistics_summary():
     summary = {}
 
     cur = conn.execute(
@@ -282,7 +320,9 @@ def get_statistics_summary():
         AND duration_ms IS NOT NULL
         """
     )
+
     average_duration = cur.fetchone()[0]
+
     summary["average_browse_duration_ms"] = (
         round(average_duration, 2)
         if average_duration is not None

@@ -32,3 +32,10 @@ LEECHER_RECHECK_MINUTES = int(
 UNKNOWN_RECHECK_MINUTES = int(
     os.getenv("UNKNOWN_RECHECK_MINUTES", 10)
 )
+UNKNOWN_RECHECK_BACKOFF_MINUTES = [
+    int(minutes)
+    for minutes in os.getenv(
+        "UNKNOWN_RECHECK_BACKOFF_MINUTES",
+        "10,10,30,60,1440"
+    ).split(",")
+]
