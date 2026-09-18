@@ -195,10 +195,28 @@ GRACE_PERIOD=120
 GOOD_RECHECK_MINUTES=1440
 LEECHER_RECHECK_MINUTES=60
 UNKNOWN_RECHECK_MINUTES=10
+UNKNOWN_RECHECK_BACKOFF_MINUTES=10,10,30,60,1440
 
 BROWSE_RETRY_DELAYS=2,5,10
 ```
 
+Unknown users use progressive recheck backoff to avoid repeatedly browsing users whose shares cannot be retrieved.
+
+By default:
+
+- Failure 1 → 10 minutes
+- Failure 2 → 10 minutes
+- Failure 3 → 30 minutes
+- Failure 4 → 60 minutes
+- Failure 5+ → 24 hours
+
+A successful browse resets the failure counter.
+
+The backoff can be configured with:
+
+```env
+UNKNOWN_RECHECK_BACKOFF_MINUTES=10,10,30,60,1440
+```
 ## slskd Integration
 
 The bot uses the slskd REST API to monitor uploads, browse users, send private messages, and read the active transfer group configuration.
