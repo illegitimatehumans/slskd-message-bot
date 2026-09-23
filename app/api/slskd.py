@@ -1,5 +1,6 @@
 import requests
 from requests.exceptions import ReadTimeout, HTTPError
+from urllib.parse import quote
 
 from app.config import (
     SLSKD_URL,
@@ -94,7 +95,7 @@ class SlskdAPI:
         try:
 
             return self.get(
-                f"/api/v0/users/{username}/browse"
+                f"/api/v0/users/{quote(username, safe="")}/browse"
             )
 
         except ReadTimeout:

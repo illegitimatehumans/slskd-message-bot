@@ -53,6 +53,19 @@ CREATE TABLE IF NOT EXISTS statistics (
 conn.commit()
 
 
+def cleanup_old_statistics():
+    cutoff = (datetime.utcnow() - timedelta(days=30)).isoformat()
+    conn.execute(
+        "DELETE FROM statistics WHERE created_at < ?",
+        (cutoff,)
+    )
+    conn.commit()
+
+
+cleanup_old_statistics()
+
+
+
 def get_user(username):
     cur = conn.execute(
         """
