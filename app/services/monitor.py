@@ -1,7 +1,6 @@
 from datetime import datetime, timezone
 
 from app.api.slskd import api
-from app.utils.logger import log
 
 
 def seconds_since(started_at: str) -> int:
@@ -19,27 +18,38 @@ def seconds_since(started_at: str) -> int:
 
 
 def get_active_users():
+    """
+    Return only users with at least one currently active upload.
+
+    Users disappear automatically as soon as their uploads are no
+    longer InProgress. Historical database/cache data is untouched.
+    """
 
     users = {}
 
     uploads = api.get_uploads()
 
     for upload in uploads:
-
         username = upload["username"]
 
-        for directory in upload["directories"]:
+        for directory in upload.get("directories", []):
+            for file in directory.get("files", []):
 
-            for file in directory["files"]:
-
-                if file["state"] != "InProgress":
+                # Only currently transferring uploads count.
+                if file.get("state") != "InProgress":
                     continue
 
                 users[username] = {
                     "username": username,
                     "filename": file["filename"],
                     "started": file["startedAt"],
-                    "seconds": seconds_since(file["startedAt"])
+                    "seconds": seconds_since(file["startedAt"]),
                 }
+
+                # One active file is enough to keep this user active.
+                break
+
+            if username in users:
+                break
 
     return list(users.values())
