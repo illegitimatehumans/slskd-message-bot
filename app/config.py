@@ -1,6 +1,6 @@
 import os
 
-SLSKD_URL = os.getenv("SLSKD_URL", "http://gluetun_slskd:5030")
+SLSKD_URL = os.getenv("SLSKD_URL", "http://docker-wireguard-pia:5030")
 SLSKD_API_KEY = os.getenv("SLSKD_API_KEY")
 
 CHECK_INTERVAL = int(os.getenv("CHECK_INTERVAL", "60"))
