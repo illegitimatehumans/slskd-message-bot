@@ -12,6 +12,8 @@ from app.services.messenger import ensure_message
 from app.services.monitor import get_active_users
 from app.services.processor import process
 
+print("=" * 70)
+print()
 print()
 print("             ███████╗██╗     ███████╗██╗  ██╗██████╗")
 print("             ██╔════╝██║     ██╔════╝██║ ██╔╝██╔══██╗")
