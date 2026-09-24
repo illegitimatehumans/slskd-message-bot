@@ -14,35 +14,33 @@ The bot reads sharing thresholds and transfer limits directly from the running s
 ## Features
 
 - Monitors active uploads
-- Configurable grace period before evaluation
+- Applies a configurable grace period before evaluation
 - Evaluates users against slskd sharing requirements
-- Automatically synchronizes with slskd transfer group settings
-- Retries temporary browse failures
-- Configurable browse retry delays
-- Temporarily skips users whose shares cannot be browsed
-- Caches evaluations to reduce unnecessary browse requests
+- Synchronizes with slskd transfer group settings
+- Retries temporary browse failures with configurable delays
+- Uses caching to reduce unnecessary browse requests
 - Prevents duplicate warning messages
-- Customizable warning messages
-- Dynamic message placeholders
-- Username whitelist
-- SQLite-based state and statistics tracking
-- Configurable recheck intervals
-- Docker and Docker Compose support
-- Prebuilt images available through GitHub Container Registry
+- Supports customizable warning messages and dynamic placeholders
+- Supports a username whitelist
+- Tracks user state and historical statistics in SQLite
+- Automatically removes statistics older than the configured retention period
+- Supports configurable recheck intervals and progressive backoff
+- Displays slskd connection, username, API, and configuration information at startup
+- Supports Docker and Docker Compose
+- Provides prebuilt images through GitHub Container Registry
 - Runs as a configurable non-root user
-- Timezone support
-- Displays a startup banner with project information
+- Supports configurable time zones
 
 ## How It Works
 
 1. The bot monitors active uploads in slskd.
-2. A configurable grace period allows the uploader time to share normally before evaluation.
+2. A configurable grace period gives new uploaders time to share normally.
 3. The bot browses the user's shared files.
-4. Shared files and directories are compared with the requirements configured in the slskd transfer group.
+4. Shared files and directories are compared with the requirements configured in the active slskd transfer group.
 5. Users who do not meet the requirements receive a private warning message.
-6. The evaluation is stored in SQLite to avoid unnecessary repeated browsing.
+6. Evaluation results are stored in SQLite to reduce unnecessary repeated browsing.
 7. Previously warned users are not sent duplicate warnings.
-8. Users are periodically rechecked according to the configured recheck intervals.
+8. Users are periodically rechecked according to their configured recheck intervals.
 
 The bot does not enforce transfer restrictions itself. Upload priorities, slots, bandwidth limits, and queue restrictions remain controlled by slskd.
 
