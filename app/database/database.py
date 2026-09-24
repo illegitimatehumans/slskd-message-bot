@@ -374,3 +374,41 @@ def get_statistics_summary():
     summary["database_cache_hits"] = cur.fetchone()[0]
 
     return summary
+def get_last_warning(username):
+    cur = conn.execute(
+        """
+        SELECT created_at
+        FROM statistics
+        WHERE username=?
+          AND event='warning_sent'
+        ORDER BY created_at DESC
+        LIMIT 1
+        """,
+        (username,),
+    )
+
+    row = cur.fetchone()
+
+    if row is None:
+        return None
+
+    return datetime.fromisoformat(row[0])
+
+
+def has_compliance_after_warning(username, warning_time):
+    cur = conn.execute(
+        """
+        SELECT 1
+        FROM statistics
+        WHERE username=?
+          AND event='compliance_achieved'
+          AND created_at > ?
+        LIMIT 1
+        """,
+        (
+            username,
+            warning_time.isoformat(),
+        ),
+    )
+
+    return cur.fetchone() is not None

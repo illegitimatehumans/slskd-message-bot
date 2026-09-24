@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from app.services.runtime import runtime_warned
 from app.config import GRACE_PERIOD
 from app.database.database import (
@@ -7,6 +9,8 @@ from app.database.database import (
     mark_warned,
     needs_recheck,
     record_stat,
+    get_last_warning,
+    has_compliance_after_warning,
 )
 from app.services.evaluator import evaluate
 from app.services.messenger import send_warning
@@ -25,30 +29,6 @@ def process(user):
 
     if username in WHITELIST:
         log.info(f"{username}: Whitelisted")
-        return
-
-    if username in runtime_warned:
-        record_stat(
-            event="session_cache_hit",
-            username=username,
-        )
-
-        log.info(
-            f"{username}: User already processed (session)"
-        )
-        return
-
-    if already_warned(username):
-        runtime_warned.add(username)
-
-        record_stat(
-            event="database_cache_hit",
-            username=username,
-        )
-
-        log.info(
-            f"{username}: User already warned (database)"
-        )
         return
 
     cached = get_user(username)
@@ -80,36 +60,82 @@ def process(user):
             f"{username}: Cached {cached['status']} - skipping browse"
         )
 
-        if cached["status"] == "LEECHER":
-            log.info(
-                f"{username}: Previously evaluated as a leecher"
-            )
-
         return
 
     log.info(f"{username}: Evaluating")
 
     result = evaluate(username)
 
-    save_user(
-        username=username,
-        status=result["status"],
-        files=result["files"],
-        directories=result["directories"],
-        warned=False,
-    )
-
-    if result["status"] == "UNKNOWN":
-        log.warning(f"{username}: Browse failed")
-        return
-
     if result["status"] == "GOOD":
+
+        warning_time = get_last_warning(username)
+
+        if (
+            warning_time is not None
+            and not has_compliance_after_warning(
+                username,
+                warning_time,
+            )
+        ):
+            compliance_time = datetime.utcnow()
+
+            duration_minutes = int(
+                (
+                    compliance_time - warning_time
+                ).total_seconds() / 60
+            )
+
+            record_stat(
+                event="compliance_achieved",
+                username=username,
+                status="GOOD",
+                files=result["files"],
+                directories=result["directories"],
+                duration_ms=duration_minutes * 60 * 1000,
+            )
+
+            log.info(
+                f"{username}: Compliance achieved "
+                f"{duration_minutes} minutes after warning"
+            )
+
+        save_user(
+            username=username,
+            status=result["status"],
+            files=result["files"],
+            directories=result["directories"],
+            warned=False,
+        )
+
         log.info(
             f"{username}: GOOD "
             f"({result['files']} files / "
             f"{result['directories']} dirs)"
         )
+
         return
+
+    if result["status"] == "UNKNOWN":
+
+        save_user(
+            username=username,
+            status=result["status"],
+            files=result["files"],
+            directories=result["directories"],
+            warned=cached["warned"] if cached else False,
+        )
+
+        log.warning(f"{username}: Browse failed")
+
+        return
+
+    save_user(
+        username=username,
+        status=result["status"],
+        files=result["files"],
+        directories=result["directories"],
+        warned=cached["warned"] if cached else False,
+    )
 
     log.warning(
         f"{username}: LEECHER "
@@ -117,27 +143,30 @@ def process(user):
         f"{result['directories']} dirs)"
     )
 
-    if send_warning(
-        username,
-        result["files"],
-        result["directories"]
-    ):
-        record_stat(
-            event="warning_sent",
-            username=username,
-            status=result["status"],
-            files=result["files"],
-            directories=result["directories"],
-        )
+    if not already_warned(username):
 
-        runtime_warned.add(username)
-        mark_warned(username)
+        if send_warning(
+            username,
+            result["files"],
+            result["directories"],
+        ):
 
-        log.warning("")
-        log.warning("======================================================")
-        log.warning("LEECHER WARNING SENT")
-        log.warning(f"User        : {username}")
-        log.warning(f"Files       : {result['files']}")
-        log.warning(f"Directories : {result['directories']}")
-        log.warning("Database    : Updated")
-        log.warning("======================================================")
+            record_stat(
+                event="warning_sent",
+                username=username,
+                status=result["status"],
+                files=result["files"],
+                directories=result["directories"],
+            )
+
+            runtime_warned.add(username)
+            mark_warned(username)
+
+            log.warning("")
+            log.warning("======================================================")
+            log.warning("LEECHER WARNING SENT")
+            log.warning(f"User        : {username}")
+            log.warning(f"Files       : {result['files']}")
+            log.warning(f"Directories : {result['directories']}")
+            log.warning("Database    : Updated")
+            log.warning("======================================================")

@@ -14,9 +14,6 @@ BROWSE_RETRY_DELAYS = [
     ).split(",")
 ]
 
-MIN_FILES = int(os.getenv("MIN_FILES", "1000"))
-MIN_DIRECTORIES = int(os.getenv("MIN_DIRECTORIES", "20"))
-
 DRY_RUN = os.getenv("DRY_RUN", "true").lower() == "true"
 
 DATABASE = "/app/data/warned.sqlite"
