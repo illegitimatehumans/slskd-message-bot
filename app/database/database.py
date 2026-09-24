@@ -7,6 +7,7 @@ from app.config import (
     LEECHER_RECHECK_MINUTES,
     UNKNOWN_RECHECK_MINUTES,
     UNKNOWN_RECHECK_BACKOFF_MINUTES,
+    STATISTICS_RETENTION_DAYS,
 )
 
 conn = sqlite3.connect(DATABASE, check_same_thread=False)
@@ -54,7 +55,10 @@ conn.commit()
 
 
 def cleanup_old_statistics():
-    cutoff = (datetime.utcnow() - timedelta(days=30)).isoformat()
+    cutoff = (
+        datetime.utcnow()
+        - timedelta(days=STATISTICS_RETENTION_DAYS)
+    ).isoformat()
     conn.execute(
         "DELETE FROM statistics WHERE created_at < ?",
         (cutoff,)

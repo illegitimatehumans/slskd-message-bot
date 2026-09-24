@@ -39,3 +39,6 @@ UNKNOWN_RECHECK_BACKOFF_MINUTES = [
         "10,10,30,60,1440"
     ).split(",")
 ]
+STATISTICS_RETENTION_DAYS = int(
+    os.getenv("STATISTICS_RETENTION_DAYS", "30")
+)
