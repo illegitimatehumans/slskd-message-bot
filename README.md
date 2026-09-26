@@ -66,6 +66,10 @@ Warning messages are fully customizable and can use live values from the slskd t
 
 ![Warning Message](assets/warning-message.png)
 
+### Compliance Statistics 
+
+![Compliance Statistics](assets/compliance.png)
+
 ## Requirements
 
 - Docker
