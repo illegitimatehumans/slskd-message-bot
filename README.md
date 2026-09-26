@@ -178,7 +178,7 @@ The following environment variables are available:
 | `CHECK_INTERVAL` | Seconds between upload scans | `60` |
 | `GRACE_PERIOD` | Seconds before evaluating a new uploader | `120` |
 | `GOOD_RECHECK_MINUTES` | Recheck interval for compliant users | `1440` |
-| `LEECHER_RECHECK_MINUTES` | Recheck interval for users below the sharing requirements | `60` |
+| `LEECHER_RECHECK_MINUTES | Recheck interval for users below the sharing requirements | `20` |
 | `BROWSE_RETRY_DELAYS` | Retry delays in seconds | `2,5,10` |
 | `UNKNOWN_RECHECK_MINUTES` | Recheck interval for users whose browse evaluation failed | `10` |
 
@@ -197,7 +197,7 @@ CHECK_INTERVAL=60
 GRACE_PERIOD=120
 
 GOOD_RECHECK_MINUTES=1440
-LEECHER_RECHECK_MINUTES=60
+LEECHER_RECHECK_MINUTES=20
 UNKNOWN_RECHECK_MINUTES=10
 UNKNOWN_RECHECK_BACKOFF_MINUTES=10,10,30,60,1440
 
@@ -340,7 +340,7 @@ Recheck intervals can be configured independently:
 
 ```env
 GOOD_RECHECK_MINUTES=1440
-LEECHER_RECHECK_MINUTES=60
+LEECHER_RECHECK_MINUTES=20
 UNKNOWN_RECHECK_MINUTES=10
 ```
 
