@@ -373,7 +373,66 @@ def get_statistics_summary():
     )
     summary["database_cache_hits"] = cur.fetchone()[0]
 
+
+    cur = conn.execute(
+        """
+        SELECT COUNT(DISTINCT username)
+        FROM statistics
+        WHERE event='warning_sent'
+        """
+    )
+    summary["unique_warned_users"] = cur.fetchone()[0]
+
+    cur = conn.execute(
+        """
+        SELECT COUNT(DISTINCT username)
+        FROM statistics
+        WHERE event='compliance_achieved'
+        """
+    )
+    summary["unique_compliant_users"] = cur.fetchone()[0]
+
+    cur = conn.execute(
+        """
+        SELECT
+            COUNT(DISTINCT username)
+        FROM statistics
+        WHERE event='compliance_achieved'
+        """
+    )
+    compliant_users = cur.fetchone()[0]
+
+    summary["compliance_rate_pct"] = (
+        round(
+            100.0 * compliant_users /
+            summary["unique_warned_users"],
+            1
+        )
+        if summary["unique_warned_users"] > 0
+        else 0
+    )
+
+    cur = conn.execute(
+        """
+        SELECT AVG(duration_ms)
+        FROM statistics
+        WHERE event='compliance_achieved'
+        AND duration_ms IS NOT NULL
+        """
+    )
+    average_compliance_minutes = cur.fetchone()[0]
+
+    summary["average_minutes_to_compliance"] = (
+        round(
+            average_compliance_minutes / 60000.0,
+            1
+        )
+        if average_compliance_minutes is not None
+        else 0
+    )
+
     return summary
+
 def get_last_warning(username):
     cur = conn.execute(
         """
