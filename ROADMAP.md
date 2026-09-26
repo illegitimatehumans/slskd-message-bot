@@ -43,55 +43,44 @@ Focused on eliminating duplicated configuration by reading the active server con
 ---
 
 # v1.5.0 — Statistics & Compliance Tracking
+**Status:** 🚧 In Progress
 
-The next major milestone focuses on measuring how effective your sharing policy actually is.
+The next major milestone focuses on measuring how effective the sharing policy actually is.
 
 ## Statistics
 
-- [ ] Users evaluated
-- [ ] GOOD users
-- [ ] LEECHERS detected
-- [ ] UNKNOWN evaluations
-- [ ] Browse failures
-- [ ] Browse success rate
-- [ ] Average browse duration
-- [ ] Total warnings sent
-- [ ] Duplicate warnings skipped
-- [ ] Session cache hits
-- [ ] Database cache hits
+- [x] Users evaluated
+- [x] GOOD users
+- [x] LEECHERS detected
+- [x] UNKNOWN evaluations
+- [x] Browse failures
+- [x] Browse success tracking
+- [x] Average browse duration
+- [x] Total warnings sent
+- [x] Session cache hits
+- [x] Database cache hits
+- [x] Statistics summary output
+- [x] Configurable statistics display interval
 
 ## Compliance Tracking
 
-One of the primary goals of the bot is encouraging users to share.
+The bot now tracks whether users become compliant after receiving a warning.
 
-Future releases will measure whether users become compliant after receiving a warning.
+### Completed
 
-Example:
+- [x] Total warnings sent
+- [x] Users who became compliant
+- [x] Compliance rate
+- [x] Average time until compliance
+- [x] Compliance events stored in database
+- [x] Compliance statistics displayed by the bot
 
-```
-Users Evaluated:          2,384
+### Planned
 
-GOOD Users:               1,947
-
-LEECHERS:                   437
-
-Warnings Sent:              412
-
-Users Became Compliant:     156
-
-Compliance Rate:          37.9%
-
-Average Time to Comply:   3.2 days
-```
-
-### Planned Metrics
-
-- [ ] Total warnings sent
-- [ ] Users who became compliant
-- [ ] Compliance rate
-- [ ] Average time until compliance
-- [ ] Historical trends
-- [ ] Warning effectiveness
+- [ ] Historical compliance trends
+- [ ] Warning effectiveness analysis
+- [ ] Per-user compliance history
+- [ ] Compliance statistics export
 
 ---
 
@@ -113,7 +102,6 @@ Improve diagnostics and troubleshooting.
 - [ ] Debug logging mode
 - [ ] Log rotation support
 - [ ] Performance timing logs
-- [ ] Statistics summary output
 
 ---
 
