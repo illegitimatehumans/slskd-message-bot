@@ -6,6 +6,7 @@
 [![Release](https://img.shields.io/badge/Release-v1.5.0-blue)](https://github.com/illegitimatehumans/slskd-message-bot/releases/tag/v1.5.0)
 
 ![Slskd Message Bot](assets/slskdbot.png)
+
 An automated sharing policy bot for [slskd](https://github.com/slskd/slskd).
 
 `slskd-message-bot` monitors active uploads, evaluates users against the sharing requirements configured in slskd, and sends a customizable private message when those requirements are not met.
